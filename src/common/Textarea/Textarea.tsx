@@ -13,6 +13,9 @@ type TextAreaProps = {
 	required?: boolean;
 	rows?: number;
 	cols?: number;
+	hasError?: boolean;
+	errorText?: string;
+	onBlur?: () => void;
 };
 
 const Textarea: React.FC<TextAreaProps> = (props) => {
@@ -27,11 +30,16 @@ const Textarea: React.FC<TextAreaProps> = (props) => {
 		required,
 		cols,
 		rows,
+		hasError,
+		errorText,
+		onBlur,
 	} = props;
 	return (
 		<div className={`${styles.group} ${addclass}`}>
 			<textarea
-				className={styles['form-input']}
+				className={`${styles['form-input']} ${
+					hasError && styles['form-input--error']
+				}`}
 				id={id}
 				name={name}
 				value={value.toString()}
@@ -39,6 +47,7 @@ const Textarea: React.FC<TextAreaProps> = (props) => {
 				required={required}
 				cols={cols}
 				rows={rows}
+				onBlur={onBlur}
 			>
 				{children}
 			</textarea>
@@ -47,11 +56,14 @@ const Textarea: React.FC<TextAreaProps> = (props) => {
 					htmlFor={id}
 					className={`${
 						props.value && props.value.length ? styles.shrink : ''
-					} ${styles['form-input-label']}`}
+					} ${styles['form-input-label']} ${
+						hasError && styles['form-input-label--error']
+					}`}
 				>
 					{label}
 				</label>
 			)}
+			{hasError && <p className={styles.error}>{errorText}</p>}
 		</div>
 	);
 };

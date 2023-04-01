@@ -30,6 +30,11 @@ $main-color: black;
         &:focus~.form-input-label {
             @include shrinkLabel();
         }
+
+        &--error {
+            border: 1px solid #b40e0e;
+            background-color: #fddddd;
+        }
     }
 
     input[type='password'] {
@@ -50,4 +55,9 @@ $main-color: black;
             @include shrinkLabel();
         }
     }
+}
+
+.error {
+    color: #b40e0e;
+    font-size: 1.4rem;
 }

@@ -3,9 +3,11 @@ import { v4 } from 'uuid';
 
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
+import Textarea from '../../common/Textarea/Textarea';
 import pipeDuration from '../../helpers/pipeDuration';
 import dateGenerator from '../../helpers/dateGeneratop';
 import { Course, Author } from '../../types/types';
+import useInput from '../../hooks/use-input';
 
 import {
 	mockedAuthorsList,
@@ -14,7 +16,6 @@ import {
 } from '../../constants';
 
 import styles from './createCourse.module.scss';
-import Textarea from '../../common/Textarea/Textarea';
 
 type CreateCourseProps = {
 	setCreateCourse: (a: boolean) => void;
@@ -22,41 +23,61 @@ type CreateCourseProps = {
 };
 
 const CreateCourse = (props: CreateCourseProps) => {
-	const [title, setTitle] = useState('');
-	const [description, setDescription] = useState('');
 	const [authors, setAuthors] = useState<Author[]>(mockedAuthorsList);
 	const [selectedAuthors, setSelectedAuthors] = useState<Author[]>([]);
-	const [newAuthor, setNewAuthor] = useState('');
-	const [duration, setDuration] = useState<null | number>(null);
 	const [durationInHours, setDurationInHours] = useState('00:00');
-	const [changed, setChanged] = useState(false);
 
-	const titleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-		setTitle(event.target.value);
-	};
+	const {
+		value: title,
+		isValid: titleIsValid,
+		hasError: titleHasError,
+		valueChangeHandler: titleChangeHandler,
+		inputBlurHandler: titleInputBlurHandler,
+		reset: resetTitle,
+	} = useInput((value) => value.length >= 3);
 
-	const descriptionChangeHandler = (
-		event: React.ChangeEvent<HTMLTextAreaElement>
-	) => {
-		setDescription(event.target.value);
-	};
+	const {
+		value: description,
+		isValid: descriptionIsValid,
+		hasError: descriptionHasError,
+		valueChangeHandler: descriptionChangeHandler,
+		inputBlurHandler: descriptionBlurHandler,
+		reset: resetDescription,
+	} = useInput((value) => value.length >= 3);
 
-	const onAuthorNameChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-		setNewAuthor(event.target.value);
-	};
+	const {
+		value: newAuthor,
+		isValid: newAuthorIsValid,
+		hasError: newAuthorHasError,
+		valueChangeHandler: onAuthorNameChangeHandler,
+		inputBlurHandler: newAuthorBlurHandler,
+		reset: resetNewAuthor,
+	} = useInput((value) => value.length >= 3);
+
+	const {
+		value: duration,
+		isValid: durationIsValid,
+		hasError: durationHasError,
+		valueChangeHandler: onDurationChangeHandler,
+		inputBlurHandler: durationBlurHandler,
+		reset: resetDuration,
+	} = useInput((value) => +value > 0);
 
 	const createAuthorHandler = () => {
 		const createdAuthor: Author = {
 			id: v4(),
 			name: newAuthor,
 		};
-		mockedAuthorsList.push(createdAuthor);
-		setChanged(!changed);
-		// setAuthors((prevState) => [...prevState, createdAuthor]);
+		if (newAuthorIsValid) {
+			mockedAuthorsList.push(createdAuthor);
+			resetNewAuthor();
+		} else {
+			alert('Authors name must be longer than 2 characters');
+		}
 	};
 
 	const durationChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-		setDuration(+event.target.value);
+		onDurationChangeHandler(event);
 		setDurationInHours(pipeDuration(+event.target.value));
 	};
 
@@ -71,30 +92,44 @@ const CreateCourse = (props: CreateCourseProps) => {
 		setAuthors((prevState) => [...prevState, ...selectedAuthor]);
 		setSelectedAuthors(selectedAuthors.filter((author) => author.id !== id));
 	};
+	let formIsValid = false;
+	if (titleIsValid && descriptionIsValid && durationIsValid) {
+		formIsValid = true;
+	}
 
 	const formSubmitHandler = (event: FormEvent) => {
 		event.preventDefault();
 		const date = dateGenerator(new Date());
 		const authorsList = selectedAuthors.map((author) => author.id);
-		if (
-			title.length === 0 ||
-			description.length < 2 ||
-			duration === 0 ||
-			duration === null ||
-			authorsList.length === 0
-		) {
+		if (!formIsValid || authorsList.length === 0) {
 			alert('Please, fill in all fields');
+			if (titleHasError) {
+				alert('Title must have at least 3 characters');
+			}
+			if (descriptionHasError) {
+				alert('Description must have at least 3 characters');
+			}
+			if (durationHasError) {
+				alert('Enter valid duration (greater than 0)');
+			}
+			if (authorsList.length === 0) {
+				alert('You have to add author to course');
+			}
 		} else {
 			const newCourse: Course = {
 				id: v4(),
 				title,
 				description,
 				creationDate: date,
-				duration,
+				duration: +duration,
 				authors: authorsList,
 			};
 			mockedCoursesList.push(newCourse);
 			props.setCreateCourse(false);
+			resetTitle();
+			resetDescription();
+			resetDuration();
+			resetNewAuthor();
 		}
 	};
 
@@ -109,6 +144,9 @@ const CreateCourse = (props: CreateCourseProps) => {
 					value={title}
 					onChange={titleChangeHandler}
 					addclass={styles['course-form__title-block']}
+					onBlur={titleInputBlurHandler}
+					hasError={titleHasError}
+					errorText='Title must have at least 3 characters'
 					required
 				/>
 				<div className={styles['course-form__buttons']}>
@@ -125,6 +163,9 @@ const CreateCourse = (props: CreateCourseProps) => {
 				onChange={descriptionChangeHandler}
 				value={description}
 				rows={5}
+				onBlur={descriptionBlurHandler}
+				hasError={descriptionHasError}
+				errorText='Description must have at least 3 characters'
 				required
 			></Textarea>
 			<div className={styles['course-form__authors']}>
@@ -138,6 +179,9 @@ const CreateCourse = (props: CreateCourseProps) => {
 							value={newAuthor}
 							onChange={onAuthorNameChangeHandler}
 							min={2}
+							onBlur={newAuthorBlurHandler}
+							hasError={newAuthorHasError}
+							errorText='Author name must have at least 3 characters'
 						/>
 						<Button type='button' onClick={createAuthorHandler}>
 							Create author
@@ -175,6 +219,9 @@ const CreateCourse = (props: CreateCourseProps) => {
 							label='Duration'
 							value={duration ? duration.toString() : ''}
 							onChange={durationChangeHandler}
+							onBlur={durationBlurHandler}
+							hasError={durationHasError}
+							errorText='Enter valid duration (greater than 0)'
 							required
 						/>
 						<p className={styles['course-form__duration']}>
