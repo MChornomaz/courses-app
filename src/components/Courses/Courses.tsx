@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 import Button from '../../common/Button/Button';
 import CreateCourse from '../CreateCourse/CreateCourse';
@@ -21,7 +21,7 @@ const Courses = () => {
 
 	let filteredCourses = courses;
 
-	const searchHandler = (searchString: string) => {
+	const searchHandler = useCallback((searchString: string) => {
 		let string = searchString.trim().toLowerCase();
 		if (string.length > 0) {
 			let filteredArray = mockedCoursesList.filter((el) =>
@@ -37,7 +37,7 @@ const Courses = () => {
 		} else {
 			return;
 		}
-	};
+	}, []);
 
 	useEffect(() => {
 		if (clearSearch) {
@@ -45,7 +45,10 @@ const Courses = () => {
 		}
 	}, [clearSearch]);
 
-	const createCourseHandler = () => setCreateCourse(!createCourse);
+	const createCourseHandler = useCallback(
+		() => setCreateCourse(!createCourse),
+		[createCourse]
+	);
 
 	return (
 		<div className={styles.wrapper}>

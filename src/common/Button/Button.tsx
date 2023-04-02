@@ -1,13 +1,13 @@
 import styles from './button.module.scss';
 
-type Props = {
+type ButtonProps = {
 	children: string;
 	type?: 'button' | 'submit' | 'reset' | undefined;
-	invert?: boolean | null | string;
+	invert?: boolean | null;
 	onClick?: () => void | ((a: string) => void);
 };
 
-const Button: React.FC<Props> = ({ children, type, invert, onClick }) => {
+const Button: React.FC<ButtonProps> = ({ children, type, invert, onClick }) => {
 	return (
 		<button
 			className={`${styles.btn} ${invert && styles.invert}`}

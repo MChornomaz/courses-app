@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent, FormEvent, useCallback } from 'react';
 
 import Button from '../../../../common/Button/Button';
 import Input from '../../../../common/Input/Input';
@@ -12,22 +12,31 @@ type SearchBarProps = {
 
 const SearchBar = (props: SearchBarProps) => {
 	const [searchString, setSearchString] = useState('');
-	const onInputChangeHandler = (event: ChangeEvent<HTMLInputElement>): void => {
-		setSearchString(event.target.value);
-		if (event.target.value.trim().length <= 1) {
-			props.clearSearch(true);
-		}
-	};
 
-	const submitHandler = (event: FormEvent) => {
-		event.preventDefault();
-		props.onSearch(searchString);
-		if (searchString.trim().length > 0) {
-			props.clearSearch(false);
-		} else {
-			props.clearSearch(true);
-		}
-	};
+	const { clearSearch, onSearch } = props;
+
+	const onInputChangeHandler = useCallback(
+		(event: ChangeEvent<HTMLInputElement>): void => {
+			setSearchString(event.target.value);
+			if (event.target.value.trim().length <= 1) {
+				clearSearch(true);
+			}
+		},
+		[clearSearch]
+	);
+
+	const submitHandler = useCallback(
+		(event: FormEvent) => {
+			event.preventDefault();
+			onSearch(searchString);
+			if (searchString.trim().length > 0) {
+				clearSearch(false);
+			} else {
+				clearSearch(true);
+			}
+		},
+		[clearSearch, onSearch, searchString]
+	);
 	return (
 		<form onSubmit={submitHandler} className={styles.content}>
 			<div className={styles['search-block']}>

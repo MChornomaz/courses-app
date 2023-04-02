@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 type ValidateFunction = (value: string) => boolean;
 
@@ -9,20 +9,21 @@ const useInput = (validateValue: ValidateFunction) => {
 	const valueIsValid = validateValue(enteredValue);
 	const hasError = !valueIsValid && isTouched;
 
-	const valueChangeHandler = (
-		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-	) => {
-		setEnteredValue(event.target.value);
-	};
+	const valueChangeHandler = useCallback(
+		(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+			setEnteredValue(event.target.value);
+		},
+		[]
+	);
 
-	const inputBlurHandler = () => {
+	const inputBlurHandler = useCallback(() => {
 		setIsTouched(true);
-	};
+	}, []);
 
-	const reset = () => {
+	const reset = useCallback(() => {
 		setEnteredValue('');
 		setIsTouched(false);
-	};
+	}, []);
 
 	return {
 		value: enteredValue,

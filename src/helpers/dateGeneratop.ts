@@ -6,7 +6,6 @@ const dateGenerator = (date: Date) => {
 	if (mm < 10) mm = '0' + mm;
 
 	let yy: number | string = date.getFullYear();
-	if (yy < 10) yy = '0' + yy;
 
 	return dd + '/' + mm + '/' + yy;
 };

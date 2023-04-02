@@ -5,6 +5,7 @@ import { Course, Author } from '../../../../types/types';
 import Button from '../../../../common/Button/Button';
 
 import styles from './courseCard.module.scss';
+import { useMemo } from 'react';
 
 type CardProps = {
 	cardInfo: Course;
@@ -12,11 +13,15 @@ type CardProps = {
 
 const CourseCard: React.FC<CardProps> = ({ cardInfo }) => {
 	const { title, description, duration, creationDate, authors } = cardInfo;
-	let authorArr: Author[] = [];
 
-	authors.forEach((author) => {
-		authorArr.push(...mockedAuthorsList.filter((el) => el.id === author));
-	});
+	const authorArr = useMemo(() => {
+		let newAuthorArr: Author[] = [];
+
+		authors.forEach((author) => {
+			newAuthorArr.push(...mockedAuthorsList.filter((el) => el.id === author));
+		});
+		return newAuthorArr;
+	}, [authors]);
 
 	const courseAuthorsArr = authorArr.map((el) => el.name);
 	const courseAuthors = courseAuthorsArr.join(', ');

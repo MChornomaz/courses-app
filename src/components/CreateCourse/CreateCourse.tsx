@@ -1,4 +1,4 @@
-import { useState, FormEvent, ChangeEvent } from 'react';
+import { useState, FormEvent, ChangeEvent, useCallback } from 'react';
 import { v4 } from 'uuid';
 
 import Button from '../../common/Button/Button';
@@ -26,6 +26,8 @@ const CreateCourse = (props: CreateCourseProps) => {
 	const [authors, setAuthors] = useState<Author[]>(mockedAuthorsList);
 	const [selectedAuthors, setSelectedAuthors] = useState<Author[]>([]);
 	const [durationInHours, setDurationInHours] = useState('00:00');
+
+	const { setCreateCourse } = props;
 
 	const {
 		value: title,
@@ -63,7 +65,7 @@ const CreateCourse = (props: CreateCourseProps) => {
 		reset: resetDuration,
 	} = useInput((value) => +value > 0);
 
-	const createAuthorHandler = () => {
+	const createAuthorHandler = useCallback(() => {
 		const createdAuthor: Author = {
 			id: v4(),
 			name: newAuthor,
@@ -74,64 +76,93 @@ const CreateCourse = (props: CreateCourseProps) => {
 		} else {
 			alert('Authors name must be longer than 2 characters');
 		}
-	};
+	}, [newAuthor, newAuthorIsValid, resetNewAuthor]);
 
-	const durationChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-		onDurationChangeHandler(event);
-		setDurationInHours(pipeDuration(+event.target.value));
-	};
+	const durationChangeHandler = useCallback(
+		(event: ChangeEvent<HTMLInputElement>) => {
+			onDurationChangeHandler(event);
+			setDurationInHours(pipeDuration(+event.target.value));
+		},
+		[onDurationChangeHandler]
+	);
 
-	const selectedAuthorHandler = (id: string): void => {
-		const selectedAuthor = authors.filter((author) => author.id === id);
-		setAuthors(authors.filter((author) => author.id !== id));
-		setSelectedAuthors((prevState) => [...prevState, ...selectedAuthor]);
-	};
+	const selectedAuthorHandler = useCallback(
+		(id: string): void => {
+			const selectedAuthor = authors.filter((author) => author.id === id);
+			setAuthors(authors.filter((author) => author.id !== id));
+			setSelectedAuthors((prevState) => [...prevState, ...selectedAuthor]);
+		},
+		[authors]
+	);
 
-	const removeAuthorHandler = (id: string): void => {
-		const selectedAuthor = selectedAuthors.filter((author) => author.id === id);
-		setAuthors((prevState) => [...prevState, ...selectedAuthor]);
-		setSelectedAuthors(selectedAuthors.filter((author) => author.id !== id));
-	};
+	const removeAuthorHandler = useCallback(
+		(id: string): void => {
+			const selectedAuthor = selectedAuthors.filter(
+				(author) => author.id === id
+			);
+			setAuthors((prevState) => [...prevState, ...selectedAuthor]);
+			setSelectedAuthors(selectedAuthors.filter((author) => author.id !== id));
+		},
+		[selectedAuthors]
+	);
+
 	let formIsValid = false;
 	if (titleIsValid && descriptionIsValid && durationIsValid) {
 		formIsValid = true;
 	}
 
-	const formSubmitHandler = (event: FormEvent) => {
-		event.preventDefault();
-		const date = dateGenerator(new Date());
-		const authorsList = selectedAuthors.map((author) => author.id);
-		if (!formIsValid || authorsList.length === 0) {
-			alert('Please, fill in all fields');
-			if (titleHasError) {
-				alert('Title must have at least 3 characters');
+	const formSubmitHandler = useCallback(
+		(event: FormEvent) => {
+			event.preventDefault();
+			const date = dateGenerator(new Date());
+			const authorsList = selectedAuthors.map((author) => author.id);
+			if (!formIsValid || authorsList.length === 0) {
+				alert('Please, fill in all fields');
+				if (titleHasError) {
+					alert('Title must have at least 3 characters');
+				}
+				if (descriptionHasError) {
+					alert('Description must have at least 3 characters');
+				}
+				if (durationHasError) {
+					alert('Enter valid duration (greater than 0)');
+				}
+				if (authorsList.length === 0) {
+					alert('You have to add author to course');
+				}
+			} else {
+				const newCourse: Course = {
+					id: v4(),
+					title,
+					description,
+					creationDate: date,
+					duration: +duration,
+					authors: authorsList,
+				};
+				mockedCoursesList.push(newCourse);
+				setCreateCourse(false);
+				resetTitle();
+				resetDescription();
+				resetDuration();
+				resetNewAuthor();
 			}
-			if (descriptionHasError) {
-				alert('Description must have at least 3 characters');
-			}
-			if (durationHasError) {
-				alert('Enter valid duration (greater than 0)');
-			}
-			if (authorsList.length === 0) {
-				alert('You have to add author to course');
-			}
-		} else {
-			const newCourse: Course = {
-				id: v4(),
-				title,
-				description,
-				creationDate: date,
-				duration: +duration,
-				authors: authorsList,
-			};
-			mockedCoursesList.push(newCourse);
-			props.setCreateCourse(false);
-			resetTitle();
-			resetDescription();
-			resetDuration();
-			resetNewAuthor();
-		}
-	};
+		},
+		[
+			description,
+			descriptionHasError,
+			duration,
+			durationHasError,
+			formIsValid,
+			resetDescription,
+			resetDuration,
+			resetNewAuthor,
+			resetTitle,
+			selectedAuthors,
+			title,
+			titleHasError,
+			setCreateCourse,
+		]
+	);
 
 	return (
 		<form onSubmit={formSubmitHandler} className={styles['course-form']}>
@@ -151,7 +182,7 @@ const CreateCourse = (props: CreateCourseProps) => {
 				/>
 				<div className={styles['course-form__buttons']}>
 					<Button type='submit'>Create course</Button>
-					<Button onClick={props.onCancel} invert='true' type='button'>
+					<Button onClick={props.onCancel} invert={true} type='button'>
 						Cancel
 					</Button>
 				</div>
