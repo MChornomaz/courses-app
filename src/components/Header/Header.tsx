@@ -1,15 +1,18 @@
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useCallback } from 'react';
 
 import Button from '../../common/Button/Button';
 import Logo from './components/Logo/Logo';
 
 import styles from './header.module.scss';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { useTypedDispatch } from '../../hooks/useTypedDispatch';
+import { logOutUser } from '../../store/user/actionCreators';
+import { getUser } from './../../store/selectors';
 
 const Header = () => {
-	const name = localStorage.getItem('userName');
-	const token = localStorage.getItem('token');
-	const navigate = useNavigate();
+	const { name, isAuth } = useTypedSelector(getUser);
+	const dispatch = useTypedDispatch();
 
 	const location = useLocation();
 	const urlSlug = location.pathname;
@@ -21,10 +24,8 @@ const Header = () => {
 	}
 
 	const logOutHandler = useCallback(() => {
-		localStorage.removeItem('token');
-		localStorage.removeItem('userName');
-		navigate('/login');
-	}, [navigate]);
+		dispatch(logOutUser());
+	}, [dispatch]);
 
 	return (
 		<header className={styles.header}>
@@ -32,7 +33,7 @@ const Header = () => {
 				<Logo />
 			</NavLink>
 			<div className={styles.header__content}>
-				{name && token && showControls && (
+				{isAuth && showControls && (
 					<p className={styles['header__user-name']}>{name}</p>
 				)}
 				{showControls && (

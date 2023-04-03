@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useCallback } from 'react';
 import { User } from '../../types/types';
 
@@ -7,12 +7,14 @@ import Button from '../../common/Button/Button';
 import useInput from '../../hooks/use-input';
 import Spinner from '../../common/Spinner/Spinner';
 
-import logInUser from '../../api/login-user';
+import { logInUserAPI } from '../../services';
 import useHttp from '../../hooks/use-http';
 import styles from './Login.module.scss';
+import { useTypedDispatch } from '../../hooks/useTypedDispatch';
+import { logInUser } from '../../store/user/actionCreators';
 
 const Login = () => {
-	const { sendRequest, status, error } = useHttp(logInUser, false);
+	const { sendRequest, status, error } = useHttp(logInUserAPI, false);
 	const {
 		value: userEmail,
 		isValid: userEmailIsValid,
@@ -31,7 +33,7 @@ const Login = () => {
 		reset: resetUserPassword,
 	} = useInput((value) => value.length >= 6);
 
-	const navigate = useNavigate();
+	const dispatch = useTypedDispatch();
 
 	let formIsValid = false;
 	if (userEmailIsValid && userPasswordIsValid) {
@@ -49,9 +51,14 @@ const Login = () => {
 				};
 				const response = await sendRequest('http://localhost:4000/login', user);
 				if (response.successful) {
+					const loggedInUser = {
+						name: response.user.name,
+						email: response.user.email,
+						token: response.result,
+					};
+					dispatch(logInUser(loggedInUser));
 					resetUserEmail();
 					resetUserPassword();
-					navigate('/courses');
 				} else if (!response.successful) {
 					alert(
 						'User was not found, please check your credentials and try again'
@@ -63,12 +70,12 @@ const Login = () => {
 		[
 			error,
 			formIsValid,
-			navigate,
 			resetUserEmail,
 			resetUserPassword,
 			sendRequest,
 			userEmail,
 			userPassword,
+			dispatch,
 		]
 	);
 
