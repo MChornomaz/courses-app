@@ -4,11 +4,12 @@ import { useCallback } from 'react';
 import Button from '../../common/Button/Button';
 import Logo from './components/Logo/Logo';
 
-import styles from './header.module.scss';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import { logOutUser } from '../../store/user/actionCreators';
 import { getUser } from './../../store/selectors';
+
+import styles from './header.module.scss';
 
 const Header = () => {
 	const { name, isAuth } = useTypedSelector(getUser);

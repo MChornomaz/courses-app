@@ -40,7 +40,8 @@ function App() {
 		} else {
 			navigate('/login');
 		}
-	}, [isLoggedIn, navigate]);
+		// eslint-disable-next-line
+	}, [isLoggedIn]);
 
 	return (
 		<div className='body-wrapper'>

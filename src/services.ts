@@ -1,3 +1,4 @@
+import { GET_AUTHORS_URL, GET_COURSES_URL } from './constants';
 import { User } from './types/types';
 
 export const createUser = async (url: string, data: User) => {
@@ -33,4 +34,26 @@ export const logInUserAPI = async (url: string, data: User) => {
 	}
 
 	return result;
+};
+
+export const fetchAllAuthors = async () => {
+	const response = await fetch(GET_AUTHORS_URL, { method: 'GET' });
+	const result = await response.json();
+
+	if (result.successful) {
+		return result.result;
+	} else {
+		throw new Error('Authors fetch failed');
+	}
+};
+
+export const fetchAllCourses = async () => {
+	const response = await fetch(GET_COURSES_URL, { method: 'GET' });
+	const result = await response.json();
+
+	if (result.successful) {
+		return result.result;
+	} else {
+		throw new Error('Authors fetch failed');
+	}
 };

@@ -57,3 +57,9 @@ export const NO_COURSES = 'Courses were not found!';
 export const ADD_COURSE_BUTTON = 'Add new course';
 
 export const NO_AUTHORS_FOUND = 'Author list is empty';
+
+//API URLs
+
+export const GET_AUTHORS_URL = 'http://localhost:4000/authors/all';
+
+export const GET_COURSES_URL = 'http://localhost:4000/courses/all';

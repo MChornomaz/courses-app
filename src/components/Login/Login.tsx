@@ -9,9 +9,10 @@ import Spinner from '../../common/Spinner/Spinner';
 
 import { logInUserAPI } from '../../services';
 import useHttp from '../../hooks/use-http';
-import styles from './Login.module.scss';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import { logInUser } from '../../store/user/actionCreators';
+
+import styles from './Login.module.scss';
 
 const Login = () => {
 	const { sendRequest, status, error } = useHttp(logInUserAPI, false);

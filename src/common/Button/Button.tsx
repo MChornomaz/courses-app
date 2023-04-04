@@ -1,7 +1,7 @@
 import styles from './button.module.scss';
 
 type ButtonProps = {
-	children: string;
+	children: string | React.ReactNode;
 	type?: 'button' | 'submit' | 'reset' | undefined;
 	invert?: boolean | null;
 	onClick?: () => void | ((a: string) => void);
