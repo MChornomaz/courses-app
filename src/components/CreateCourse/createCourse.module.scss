@@ -1,0 +1,84 @@
+.course-form {
+    width: 95%;
+    margin: 0 auto;
+    padding: 3% 2.5%;
+
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        height: 7rem;
+        align-items: center;
+    }
+
+    &__title-block {
+        width: 50%;
+    }
+
+    &__buttons {
+        width: 30%;
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    &__authors {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        padding: 20px 0;
+        row-gap: 50px;
+    }
+
+    &__left-block {
+        width: 100%;
+    }
+
+    &__right-block {
+        width: 100%;
+        padding-left: 10%;
+    }
+
+    &__add-author button {
+        display: block;
+        margin: 0 auto;
+    }
+
+    &__author {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.8rem;
+        margin-top: 1rem;
+    }
+
+    &__empty {
+        text-align: center;
+    }
+
+    &__duration {
+        margin-top: 10rem;
+        font-size: 3rem;
+    }
+
+    &__duration-time {
+        font-size: 3.3rem;
+        font-weight: 600;
+    }
+}
+
+
+
+
+
+.heading {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+
+
+.duration {
+    margin-top: 50px;
+}
