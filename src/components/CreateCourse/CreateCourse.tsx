@@ -68,7 +68,6 @@ const CreateCourse = () => {
 			id: v4(),
 			name: newAuthor,
 		};
-
 		if (newAuthorIsValid) {
 			mockedAuthorsList.push(createdAuthor);
 			resetNewAuthor();
