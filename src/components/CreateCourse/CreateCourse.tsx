@@ -80,7 +80,7 @@ const CreateCourse = () => {
 	const durationChangeHandler = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
 			onDurationChangeHandler(event);
-			setDurationInHours(pipeDuration(+event.target.value));
+			setDurationInHours(pipeDuration(parseInt(event.target.value)));
 		},
 		[onDurationChangeHandler]
 	);
