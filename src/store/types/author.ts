@@ -5,3 +5,7 @@ export type AuthorState = {
 	authorsIsLoading: boolean;
 	authorsHasError: null | string;
 };
+
+export type AuthorApiBody = {
+	name: string;
+};

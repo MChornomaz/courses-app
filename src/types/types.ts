@@ -1,3 +1,7 @@
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { AppDispatch, RootState } from '../store';
+
 export type Course = {
 	id: string;
 	title: string;
@@ -17,3 +21,10 @@ export type User = {
 	password: string;
 	name?: string;
 };
+
+export type AppThunk<ReturnType = void> = ThunkAction<
+	ReturnType,
+	RootState,
+	AppDispatch,
+	AnyAction
+>;
