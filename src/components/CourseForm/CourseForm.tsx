@@ -268,8 +268,13 @@ const CourseForm = () => {
 								onBlur={newAuthorBlurHandler}
 								hasError={newAuthorHasError}
 								errorText='Author name must have at least 3 characters'
+								testid='author-name'
 							/>
-							<Button type='button' onClick={createAuthorHandler}>
+							<Button
+								testid='create-author'
+								type='button'
+								onClick={createAuthorHandler}
+							>
 								Create author
 							</Button>
 						</div>
@@ -281,11 +286,15 @@ const CourseForm = () => {
 								{authors &&
 									authors.map((author) => (
 										<li
+											data-testid='authors'
 											className={styles['course-form__author']}
 											key={author.id}
 										>
 											<p>{author.name}</p>
-											<Button onClick={() => selectedAuthorHandler(author.id)}>
+											<Button
+												testid='select-author'
+												onClick={() => selectedAuthorHandler(author.id)}
+											>
 												Add author
 											</Button>
 										</li>
@@ -328,11 +337,15 @@ const CourseForm = () => {
 							{selectedAuthors &&
 								selectedAuthors.map((author) => (
 									<li
+										data-testid='course-authors'
 										className={styles['course-form__author']}
 										key={author.name}
 									>
 										<p>{author.name}</p>
-										<Button onClick={() => removeAuthorHandler(author.id)}>
+										<Button
+											testid='remove-author'
+											onClick={() => removeAuthorHandler(author.id)}
+										>
 											Remove author
 										</Button>
 									</li>
