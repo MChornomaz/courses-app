@@ -57,3 +57,23 @@ export const NO_COURSES = 'Courses were not found!';
 export const ADD_COURSE_BUTTON = 'Add new course';
 
 export const NO_AUTHORS_FOUND = 'Author list is empty';
+
+//API URLs
+
+export const GET_AUTHORS_URL = 'http://localhost:4000/authors/all';
+
+export const GET_COURSES_URL = 'http://localhost:4000/courses/all';
+
+export const GET_CURRENT_USER_URL = 'http://localhost:4000/users/me';
+
+export const LOG_IN_URL = 'http://localhost:4000/login';
+
+export const LOG_OUT_URL = 'http://localhost:4000/logout';
+
+export const ADD_COURSE_URL = 'http://localhost:4000/courses/add';
+
+export const ADD_AUTHOR_URL = 'http://localhost:4000/authors/add';
+
+export const DELETE_COURSE_URL = 'http://localhost:4000/courses/';
+
+export const UPDATE_COURSE_URL = 'http://localhost:4000/courses/';

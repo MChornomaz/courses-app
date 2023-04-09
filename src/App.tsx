@@ -6,33 +6,36 @@ import Header from './components/Header/Header';
 import Registration from './components/Registration/Registration';
 import Login from './components/Login/Login';
 import CourseInfo from './components/CourseInfo/CourseInfo';
-import CreateCourse from './components/CreateCourse/CreateCourse';
+import CourseForm from './components/CourseForm/CourseForm';
 import { useTypedSelector } from './hooks/useTypedSelector';
 import { useTypedDispatch } from './hooks/useTypedDispatch';
 import { UserLoginPayload } from './store/user/actionTypes';
-import { logInUser } from './store/user/actionCreators';
+import { logInUserAction } from './store/user/actionCreators';
 import { getUser } from './store/selectors';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 
 function App() {
 	const navigate = useNavigate();
 	const name = localStorage.getItem('userName');
 	const token = localStorage.getItem('token');
 	const email = localStorage.getItem('email');
+	const role = localStorage.getItem('role');
 	const user = useTypedSelector(getUser);
 	const isLoggedIn = user.isAuth;
 
 	const dispatch = useTypedDispatch();
 
 	useEffect(() => {
-		if (name && email && token) {
+		if (name && email && token && role) {
 			const loggedUser: UserLoginPayload = {
 				name,
 				email,
 				token,
+				role,
 			};
-			dispatch(logInUser(loggedUser));
+			dispatch(logInUserAction(loggedUser));
 		}
-	}, [dispatch, name, email, token]);
+	}, [dispatch, name, email, token, role]);
 
 	useEffect(() => {
 		if (isLoggedIn) {
@@ -40,7 +43,8 @@ function App() {
 		} else {
 			navigate('/login');
 		}
-	}, [isLoggedIn, navigate]);
+		// eslint-disable-next-line
+	}, [isLoggedIn]);
 
 	return (
 		<div className='body-wrapper'>
@@ -51,10 +55,16 @@ function App() {
 				)}
 				{isLoggedIn && <Route path='/courses/*' element={<Courses />} />}
 				{isLoggedIn && (
-					<Route path={'/courses/add'} element={<CreateCourse />} />
+					<Route element={<PrivateRoute user={role} redirectPath='/courses' />}>
+						<Route path={'/courses/add'} element={<CourseForm />} />
+					</Route>
 				)}
+
 				{isLoggedIn && (
 					<Route path='/courses/:courseId' element={<CourseInfo />} />
+				)}
+				{isLoggedIn && (
+					<Route path='/courses/update/:courseId' element={<CourseForm />} />
 				)}
 				<Route path='/registration' element={<Registration />} />
 				<Route path='/login' element={<Login />} />

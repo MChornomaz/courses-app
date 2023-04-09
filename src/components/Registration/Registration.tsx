@@ -6,9 +6,10 @@ import { createUser } from './../../services';
 
 import Input from '../../common/Input/Input';
 import Button from '../../common/Button/Button';
-import { User } from '../../types/types';
-import useInput from '../../hooks/use-input';
 import Spinner from '../../common/Spinner/Spinner';
+import useInput from '../../hooks/use-input';
+
+import { User } from '../../types/types';
 
 import styles from './Registration.module.scss';
 

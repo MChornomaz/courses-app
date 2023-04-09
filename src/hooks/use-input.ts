@@ -32,6 +32,7 @@ const useInput = (validateValue: ValidateFunction) => {
 		valueChangeHandler,
 		inputBlurHandler,
 		reset,
+		setEnteredValue,
 	};
 };
 

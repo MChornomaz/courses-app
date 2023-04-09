@@ -1,5 +1,7 @@
 import LogoIcon from '../../../../assets/image/Logo.png';
 
-const Logo = () => <img src={LogoIcon} alt='Best Courses Logo' />;
+const Logo = () => (
+	<img data-testid='logo' src={LogoIcon} alt='Best Courses Logo' />
+);
 
 export default Logo;

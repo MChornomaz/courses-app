@@ -7,14 +7,17 @@ import Button from '../../common/Button/Button';
 import useInput from '../../hooks/use-input';
 import Spinner from '../../common/Spinner/Spinner';
 
-import { logInUserAPI } from '../../services';
-import useHttp from '../../hooks/use-http';
-import styles from './Login.module.scss';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
-import { logInUser } from '../../store/user/actionCreators';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { getUser } from './../../store/selectors';
+import { logInUserThunk } from '../../store/user/thunk';
+
+import styles from './Login.module.scss';
 
 const Login = () => {
-	const { sendRequest, status, error } = useHttp(logInUserAPI, false);
+	const user = useTypedSelector(getUser);
+	const { isLoading, hasError } = user;
+	const dispatch = useTypedDispatch();
 	const {
 		value: userEmail,
 		isValid: userEmailIsValid,
@@ -33,8 +36,6 @@ const Login = () => {
 		reset: resetUserPassword,
 	} = useInput((value) => value.length >= 6);
 
-	const dispatch = useTypedDispatch();
-
 	let formIsValid = false;
 	if (userEmailIsValid && userPasswordIsValid) {
 		formIsValid = true;
@@ -45,34 +46,27 @@ const Login = () => {
 			event.preventDefault();
 
 			if (formIsValid) {
-				const user: User = {
+				const loggedUser: User = {
 					email: userEmail,
 					password: userPassword,
 				};
-				const response = await sendRequest('http://localhost:4000/login', user);
-				if (response.successful) {
-					const loggedInUser = {
-						name: response.user.name,
-						email: response.user.email,
-						token: response.result,
-					};
-					dispatch(logInUser(loggedInUser));
-					resetUserEmail();
-					resetUserPassword();
-				} else if (!response.successful) {
-					alert(
-						'User was not found, please check your credentials and try again'
-					);
-					if (error) alert(error);
-				}
+				try {
+					dispatch(logInUserThunk(loggedUser) as any);
+				} catch (e) {}
+				resetUserEmail();
+				resetUserPassword();
+			} else if (hasError) {
+				alert(
+					'User was not found, please check your credentials and try again'
+				);
 			}
 		},
+
 		[
-			error,
+			hasError,
 			formIsValid,
 			resetUserEmail,
 			resetUserPassword,
-			sendRequest,
 			userEmail,
 			userPassword,
 			dispatch,
@@ -82,7 +76,7 @@ const Login = () => {
 	return (
 		<div className={styles.wrapper}>
 			<h2 className={styles.heading}>Login</h2>
-			{status === 'pending' && <Spinner />}
+			{isLoading && <Spinner />}
 			<form onSubmit={submitHandler} className={styles['registration-form']}>
 				<Input
 					id='email'
