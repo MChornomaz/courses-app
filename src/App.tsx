@@ -8,6 +8,7 @@ import Login from './components/Login/Login';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 import CreateCourse from './components/CreateCourse/CreateCourse';
 import { ROUTES } from './constants';
+import Page404 from './components/Page404/Page404';
 
 function App() {
 	const navigate = useNavigate();
@@ -52,6 +53,7 @@ function App() {
 				)}
 				<Route path={ROUTES.REGISTRATION} element={<Registration />} />
 				<Route path={ROUTES.LOGIN} element={<Login />} />
+				<Route path='*' element={<Page404 />} />
 			</Routes>
 		</div>
 	);
