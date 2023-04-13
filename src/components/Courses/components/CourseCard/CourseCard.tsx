@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useMemo, useCallback } from 'react';
 
-import { mockedAuthorsList } from '../../../../constants';
+import { ROUTES, mockedAuthorsList } from '../../../../constants';
 
 import pipeDuration from '../../../../helpers/pipeDuration';
 import { Course, Author } from '../../../../types/types';
@@ -33,7 +33,7 @@ const CourseCard: React.FC<CardProps> = ({ cardInfo }) => {
 	const courseDuration = pipeDuration(duration);
 
 	const buttonClickHandler = useCallback(() => {
-		navigate(`/courses/${id}`);
+		navigate(`${ROUTES.COURSES}/${id}`);
 	}, [id, navigate]);
 
 	const cutString = useCallback((str: string, number: number) => {

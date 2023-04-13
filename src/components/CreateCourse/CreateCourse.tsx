@@ -14,6 +14,7 @@ import {
 	mockedAuthorsList,
 	mockedCoursesList,
 	NO_AUTHORS_FOUND,
+	ROUTES,
 } from '../../constants';
 
 import styles from './createCourse.module.scss';
@@ -25,7 +26,7 @@ const CreateCourse = () => {
 
 	const navigate = useNavigate();
 
-	const onCancel = () => navigate('/courses');
+	const onCancel = () => navigate(ROUTES.COURSES);
 
 	const {
 		value: title,
@@ -79,7 +80,7 @@ const CreateCourse = () => {
 	const durationChangeHandler = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
 			onDurationChangeHandler(event);
-			setDurationInHours(pipeDuration(parseInt(event.target.value)));
+			setDurationInHours(pipeDuration(parseInt(event.target.value, 10)));
 		},
 		[onDurationChangeHandler]
 	);
@@ -142,7 +143,7 @@ const CreateCourse = () => {
 				resetDescription();
 				resetDuration();
 				resetNewAuthor();
-				navigate('/courses');
+				navigate(ROUTES.COURSES);
 			}
 		},
 		[

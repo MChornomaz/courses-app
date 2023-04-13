@@ -9,6 +9,7 @@ import Button from '../../common/Button/Button';
 import { User } from '../../types/types';
 import useInput from '../../hooks/use-input';
 import Spinner from '../../common/Spinner/Spinner';
+import { ROUTES } from '../../constants';
 
 import styles from './Registration.module.scss';
 
@@ -66,7 +67,7 @@ const Registration = () => {
 					resetUserName();
 					resetUserEmail();
 					resetUserPassword();
-					navigate('/login');
+					navigate(ROUTES.LOGIN);
 				} else if (!response.successful) {
 					if (response.errors) alert(response.errors);
 					if (error) alert(error);

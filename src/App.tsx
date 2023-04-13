@@ -7,6 +7,7 @@ import Registration from './components/Registration/Registration';
 import Login from './components/Login/Login';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 import CreateCourse from './components/CreateCourse/CreateCourse';
+import { ROUTES } from './constants';
 
 function App() {
 	const navigate = useNavigate();
@@ -23,9 +24,9 @@ function App() {
 	useEffect(() => {
 		const token = localStorage.getItem('token');
 		if (token) {
-			navigate('/courses');
+			navigate(ROUTES.COURSES);
 		} else {
-			navigate('/login');
+			navigate(ROUTES.LOGIN);
 		}
 		// eslint-disable-next-line
 	}, []);
@@ -35,17 +36,22 @@ function App() {
 			<Header />
 			<Routes>
 				{isLoggedIn && (
-					<Route path='/' element={<Navigate replace to='/courses' />} />
-				)}
-				{isLoggedIn && <Route path='/courses/*' element={<Courses />} />}
-				{isLoggedIn && (
-					<Route path={'/courses/add'} element={<CreateCourse />} />
+					<Route path='/' element={<Navigate replace to={ROUTES.COURSES} />} />
 				)}
 				{isLoggedIn && (
-					<Route path='/courses/:courseId' element={<CourseInfo />} />
+					<Route path={`${ROUTES.COURSES}/*`} element={<Courses />} />
 				)}
-				<Route path='/registration' element={<Registration />} />
-				<Route path='/login' element={<Login />} />
+				{isLoggedIn && (
+					<Route path={ROUTES.ADD_COURSE} element={<CreateCourse />} />
+				)}
+				{isLoggedIn && (
+					<Route
+						path={`${ROUTES.COURSES}/:courseId`}
+						element={<CourseInfo />}
+					/>
+				)}
+				<Route path={ROUTES.REGISTRATION} element={<Registration />} />
+				<Route path={ROUTES.LOGIN} element={<Login />} />
 			</Routes>
 		</div>
 	);

@@ -1,26 +1,21 @@
 import { useParams, NavLink } from 'react-router-dom';
 import { Course } from '../../types/types';
 import { mockedCoursesList, mockedAuthorsList } from '../../constants';
+import pipeDuration from '../../helpers/pipeDuration';
 
 import styles from './CourseInfo.module.scss';
-import pipeDuration from '../../helpers/pipeDuration';
 
 const CourseInfo = () => {
 	const params = useParams();
 	const { courseId } = params;
-	const course: Course = mockedCoursesList.filter(
+	const course: Course | undefined = mockedCoursesList.find(
 		(item) => item.id === courseId
-	)[0];
-	let durationString = '';
-	if (course) {
-		durationString = pipeDuration(course.duration);
-	}
+	);
+
+	const durationString = course ? pipeDuration(course.duration) : '';
 
 	return (
-		<div
-			style={{ padding: '5rem 5%' }}
-			className={`wrapper ${styles['card-info']}`}
-		>
+		<div className={`wrapper ${styles['card-info']}`}>
 			<NavLink to='/courses' className={styles.link}>
 				{' '}
 				&lt; Back to course

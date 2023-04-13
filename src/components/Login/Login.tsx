@@ -9,6 +9,8 @@ import Spinner from '../../common/Spinner/Spinner';
 
 import logInUser from '../../api/login-user';
 import useHttp from '../../hooks/use-http';
+import { ROUTES } from '../../constants';
+
 import styles from './Login.module.scss';
 
 const Login = () => {
@@ -51,7 +53,7 @@ const Login = () => {
 				if (response.successful) {
 					resetUserEmail();
 					resetUserPassword();
-					navigate('/courses');
+					navigate(ROUTES.COURSES);
 				} else if (!response.successful) {
 					alert(
 						'User was not found, please check your credentials and try again'

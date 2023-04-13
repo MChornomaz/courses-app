@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 
 import Button from '../../common/Button/Button';
 import Logo from './components/Logo/Logo';
+import { ROUTES } from '../../constants';
 
 import styles from './header.module.scss';
 
@@ -14,16 +15,15 @@ const Header = () => {
 	const location = useLocation();
 	const urlSlug = location.pathname;
 	let showControls: boolean;
-	if (urlSlug === '/login' || urlSlug === '/registration') {
-		showControls = false;
-	} else {
-		showControls = true;
-	}
+
+	urlSlug === '/login' || urlSlug === '/registration'
+		? (showControls = false)
+		: (showControls = true);
 
 	const logOutHandler = useCallback(() => {
 		localStorage.removeItem('token');
 		localStorage.removeItem('userName');
-		navigate('/login');
+		navigate(ROUTES.LOGIN);
 	}, [navigate]);
 
 	return (

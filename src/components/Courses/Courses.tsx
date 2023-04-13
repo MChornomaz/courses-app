@@ -10,6 +10,7 @@ import {
 	ADD_COURSE_BUTTON,
 	mockedCoursesList,
 	NO_COURSES,
+	ROUTES,
 } from '../../constants';
 
 import styles from './courses.module.scss';
@@ -47,7 +48,7 @@ const Courses = () => {
 	}, [clearSearch]);
 
 	const createCourseHandler = useCallback(
-		() => navigate('/courses/add'),
+		() => navigate(ROUTES.ADD_COURSE),
 		[navigate]
 	);
 
