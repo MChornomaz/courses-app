@@ -66,7 +66,7 @@ const Registration = () => {
 					resetUserName();
 					resetUserEmail();
 					resetUserPassword();
-					navigate('/login');
+					navigate(ROUTES.LOGIN);
 				} else if (!response.successful) {
 					if (response.errors) alert(response.errors);
 					if (error) alert(error);

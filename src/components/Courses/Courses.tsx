@@ -103,7 +103,7 @@ const Courses = () => {
 	}, [clearSearch, stateCourses]);
 
 	const createCourseHandler = useCallback(
-		() => navigate('/courses/add'),
+		() => navigate(ROUTES.ADD_COURSE),
 		[navigate]
 	);
 

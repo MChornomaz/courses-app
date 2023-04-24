@@ -72,7 +72,6 @@ const CreateCourse = () => {
 			id: v4(),
 			name: newAuthor,
 		};
-
 		if (newAuthorIsValid) {
 			dispatch(addAuthor(createdAuthor));
 			setAuthors((prevState) => [...prevState, createdAuthor]);
@@ -148,7 +147,7 @@ const CreateCourse = () => {
 				resetDescription();
 				resetDuration();
 				resetNewAuthor();
-				navigate('/courses');
+				navigate(ROUTES.COURSES);
 			}
 		},
 		[
