@@ -11,3 +11,9 @@ export type Author = {
 	id: string;
 	name: string;
 };
+
+export type User = {
+	email: string;
+	password: string;
+	name?: string;
+};

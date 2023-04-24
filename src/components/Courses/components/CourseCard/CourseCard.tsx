@@ -1,18 +1,23 @@
-import { mockedAuthorsList } from '../../../../constants';
+import { useNavigate } from 'react-router-dom';
+import { useMemo, useCallback } from 'react';
+
+import { ROUTES, mockedAuthorsList } from '../../../../constants';
 
 import pipeDuration from '../../../../helpers/pipeDuration';
 import { Course, Author } from '../../../../types/types';
 import Button from '../../../../common/Button/Button';
 
 import styles from './courseCard.module.scss';
-import { useMemo } from 'react';
 
 type CardProps = {
 	cardInfo: Course;
 };
 
 const CourseCard: React.FC<CardProps> = ({ cardInfo }) => {
-	const { title, description, duration, creationDate, authors } = cardInfo;
+	const { id, title, duration, creationDate, authors } = cardInfo;
+	let { description } = cardInfo;
+
+	const navigate = useNavigate();
 
 	const authorArr = useMemo(() => {
 		let newAuthorArr: Author[] = [];
@@ -26,6 +31,18 @@ const CourseCard: React.FC<CardProps> = ({ cardInfo }) => {
 	const courseAuthorsArr = authorArr.map((el) => el.name);
 	const courseAuthors = courseAuthorsArr.join(', ');
 	const courseDuration = pipeDuration(duration);
+
+	const buttonClickHandler = useCallback(() => {
+		navigate(`${ROUTES.COURSES}/${id}`);
+	}, [id, navigate]);
+
+	const cutString = useCallback((str: string, number: number) => {
+		return str.slice(0, number);
+	}, []);
+
+	if (description.length > 420) {
+		description = cutString(description, 420) + '...';
+	}
 
 	return (
 		<div className={styles.card}>
@@ -46,7 +63,7 @@ const CourseCard: React.FC<CardProps> = ({ cardInfo }) => {
 					<span className={styles.card__heading}>Created: </span>
 					<span>{creationDate}</span>
 				</p>
-				<Button>Show course</Button>
+				<Button onClick={buttonClickHandler}>Show course</Button>
 			</div>
 		</div>
 	);

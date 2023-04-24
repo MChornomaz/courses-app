@@ -1,5 +1,6 @@
 import { useState, FormEvent, ChangeEvent, useCallback } from 'react';
 import { v4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
@@ -13,21 +14,19 @@ import {
 	mockedAuthorsList,
 	mockedCoursesList,
 	NO_AUTHORS_FOUND,
+	ROUTES,
 } from '../../constants';
 
 import styles from './createCourse.module.scss';
 
-type CreateCourseProps = {
-	setCreateCourse: (a: boolean) => void;
-	onCancel: () => void;
-};
-
-const CreateCourse = (props: CreateCourseProps) => {
+const CreateCourse = () => {
 	const [authors, setAuthors] = useState<Author[]>(mockedAuthorsList);
 	const [selectedAuthors, setSelectedAuthors] = useState<Author[]>([]);
 	const [durationInHours, setDurationInHours] = useState('00:00');
 
-	const { setCreateCourse } = props;
+	const navigate = useNavigate();
+
+	const onCancel = () => navigate(ROUTES.COURSES);
 
 	const {
 		value: title,
@@ -81,7 +80,7 @@ const CreateCourse = (props: CreateCourseProps) => {
 	const durationChangeHandler = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
 			onDurationChangeHandler(event);
-			setDurationInHours(pipeDuration(+event.target.value));
+			setDurationInHours(pipeDuration(parseInt(event.target.value, 10)));
 		},
 		[onDurationChangeHandler]
 	);
@@ -140,11 +139,11 @@ const CreateCourse = (props: CreateCourseProps) => {
 					authors: authorsList,
 				};
 				mockedCoursesList.push(newCourse);
-				setCreateCourse(false);
 				resetTitle();
 				resetDescription();
 				resetDuration();
 				resetNewAuthor();
+				navigate(ROUTES.COURSES);
 			}
 		},
 		[
@@ -160,79 +159,130 @@ const CreateCourse = (props: CreateCourseProps) => {
 			selectedAuthors,
 			title,
 			titleHasError,
-			setCreateCourse,
+			navigate,
 		]
 	);
 
 	return (
-		<form onSubmit={formSubmitHandler} className={styles['course-form']}>
-			<div className={styles['course-form__header']}>
-				<Input
-					type='text'
-					id='course-title'
-					name='title'
-					label='Title'
-					value={title}
-					onChange={titleChangeHandler}
-					addclass={styles['course-form__title-block']}
-					onBlur={titleInputBlurHandler}
-					hasError={titleHasError}
-					errorText='Title must have at least 3 characters'
-					required
-				/>
-				<div className={styles['course-form__buttons']}>
-					<Button type='submit'>Create course</Button>
-					<Button onClick={props.onCancel} invert={true} type='button'>
-						Cancel
-					</Button>
-				</div>
-			</div>
-			<Textarea
-				textarea='true'
-				label='Description'
-				id='description'
-				onChange={descriptionChangeHandler}
-				value={description}
-				rows={5}
-				onBlur={descriptionBlurHandler}
-				hasError={descriptionHasError}
-				errorText='Description must have at least 3 characters'
-				required
-			></Textarea>
-			<div className={styles['course-form__authors']}>
-				<div className={styles['course-form__left-block']}>
-					<h3 className={styles.heading}>Add author</h3>
-					<div className={styles['course-form__add-author']}>
-						<Input
-							type='text'
-							id='author-name'
-							label='Author name'
-							value={newAuthor}
-							onChange={onAuthorNameChangeHandler}
-							min={2}
-							onBlur={newAuthorBlurHandler}
-							hasError={newAuthorHasError}
-							errorText='Author name must have at least 3 characters'
-						/>
-						<Button type='button' onClick={createAuthorHandler}>
-							Create author
+		<div className='wrapper'>
+			<form onSubmit={formSubmitHandler} className={styles['course-form']}>
+				<div className={styles['course-form__header']}>
+					<Input
+						type='text'
+						id='course-title'
+						name='title'
+						label='Title'
+						value={title}
+						onChange={titleChangeHandler}
+						addclass={styles['course-form__title-block']}
+						onBlur={titleInputBlurHandler}
+						hasError={titleHasError}
+						errorText='Title must have at least 3 characters'
+						required
+					/>
+					<div className={styles['course-form__buttons']}>
+						<Button type='submit'>Create course</Button>
+						<Button onClick={onCancel} invert={true} type='button'>
+							Cancel
 						</Button>
 					</div>
 				</div>
-				<div className={styles['course-form__right-block']}>
-					<div className={styles['course-form__authors__block']}>
-						<h3 className={styles.heading}>Authors</h3>
+				<Textarea
+					textarea='true'
+					label='Description'
+					id='description'
+					onChange={descriptionChangeHandler}
+					value={description}
+					rows={5}
+					onBlur={descriptionBlurHandler}
+					hasError={descriptionHasError}
+					errorText='Description must have at least 3 characters'
+					required
+				></Textarea>
+				<div className={styles['course-form__authors']}>
+					<div className={styles['course-form__left-block']}>
+						<h3 className={styles.heading}>Add author</h3>
+						<div className={styles['course-form__add-author']}>
+							<Input
+								type='text'
+								id='author-name'
+								label='Author name'
+								value={newAuthor}
+								onChange={onAuthorNameChangeHandler}
+								min={2}
+								onBlur={newAuthorBlurHandler}
+								hasError={newAuthorHasError}
+								errorText='Author name must have at least 3 characters'
+							/>
+							<Button type='button' onClick={createAuthorHandler}>
+								Create author
+							</Button>
+						</div>
+					</div>
+					<div className={styles['course-form__right-block']}>
+						<div className={styles['course-form__authors__block']}>
+							<h3 className={styles.heading}>Authors</h3>
+							<ul className={styles['course-form__choose-authors']}>
+								{authors &&
+									authors.map((author) => (
+										<li
+											className={styles['course-form__author']}
+											key={author.id}
+										>
+											<p>{author.name}</p>
+											<Button onClick={() => selectedAuthorHandler(author.id)}>
+												Add author
+											</Button>
+										</li>
+									))}
+								{authors.length === 0 && (
+									<p className={styles['course-form__empty']}>
+										{NO_AUTHORS_FOUND}
+									</p>
+								)}
+							</ul>
+						</div>
+					</div>
+					<div className={styles['course-form__left-block']}>
+						<div className={styles['course-form__duration-block']}>
+							<h3 className={styles.heading}>Duration</h3>
+							<Input
+								type='number'
+								step={1}
+								id='duration'
+								label='Duration'
+								value={duration ? duration.toString() : ''}
+								onChange={durationChangeHandler}
+								onBlur={durationBlurHandler}
+								hasError={durationHasError}
+								errorText='Enter valid duration (greater than 0)'
+								required
+							/>
+							<p className={styles['course-form__duration']}>
+								Duration:{' '}
+								<span className={styles['course-form__duration-time']}>
+									{durationInHours}
+								</span>{' '}
+								hours
+							</p>
+						</div>
+					</div>
+					<div className={styles['course-form__right-block']}>
+						<h3 className={styles.heading}>Course authors</h3>
 						<ul className={styles['course-form__choose-authors']}>
-							{authors &&
-								authors.map((author) => (
-									<li className={styles['course-form__author']} key={author.id}>
+							{selectedAuthors &&
+								selectedAuthors.map((author) => (
+									<li
+										className={styles['course-form__author']}
+										key={author.name}
+									>
 										<p>{author.name}</p>
-										<Button onClick={() => selectedAuthorHandler(author.id)}>
-											Add author
+										<Button onClick={() => removeAuthorHandler(author.id)}>
+											Remove author
 										</Button>
 									</li>
 								))}
-							{authors.length === 0 && (
+							{selectedAuthors.length === 0 && (
 								<p className={styles['course-form__empty']}>
 									{NO_AUTHORS_FOUND}
 								</p>
@@ -240,49 +290,8 @@ const CreateCourse = (props: CreateCourseProps) => {
 						</ul>
 					</div>
 				</div>
-				<div className={styles['course-form__left-block']}>
-					<div className={styles['course-form__duration-block']}>
-						<h3 className={styles.heading}>Duration</h3>
-						<Input
-							type='number'
-							step={1}
-							id='duration'
-							label='Duration'
-							value={duration ? duration.toString() : ''}
-							onChange={durationChangeHandler}
-							onBlur={durationBlurHandler}
-							hasError={durationHasError}
-							errorText='Enter valid duration (greater than 0)'
-							required
-						/>
-						<p className={styles['course-form__duration']}>
-							Duration:{' '}
-							<span className={styles['course-form__duration-time']}>
-								{durationInHours}
-							</span>{' '}
-							hours
-						</p>
-					</div>
-				</div>
-				<div className={styles['course-form__right-block']}>
-					<h3 className={styles.heading}>Course authors</h3>
-					<ul className={styles['course-form__choose-authors']}>
-						{selectedAuthors &&
-							selectedAuthors.map((author) => (
-								<li className={styles['course-form__author']} key={author.name}>
-									<p>{author.name}</p>
-									<Button onClick={() => removeAuthorHandler(author.id)}>
-										Remove author
-									</Button>
-								</li>
-							))}
-						{selectedAuthors.length === 0 && (
-							<p className={styles['course-form__empty']}>{NO_AUTHORS_FOUND}</p>
-						)}
-					</ul>
-				</div>
-			</div>
-		</form>
+			</form>
+		</div>
 	);
 };
 

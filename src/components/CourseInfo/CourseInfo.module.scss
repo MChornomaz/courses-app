@@ -1,0 +1,49 @@
+.link {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+    margin-bottom: 5rem;
+    font-size: 2rem;
+}
+
+.card-info {
+    font-size: 2rem;
+    min-height: 80vh;
+    padding: 5rem 5%;
+
+
+
+    &__heading {
+        text-align: center;
+        font-size: 4.5rem;
+        margin-bottom: 5rem;
+        letter-spacing: 4px;
+    }
+
+    &__container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__description {
+        width: 60%;
+        line-height: 1.7;
+    }
+
+    &__item {
+        margin-bottom: 2rem;
+    }
+
+    &__criteria {
+        font-weight: 600;
+
+    }
+
+    &__authors {
+        list-style: none;
+    }
+
+    &__author {
+        margin-bottom: 1.5rem;
+    }
+}

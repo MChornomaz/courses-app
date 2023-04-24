@@ -12,8 +12,7 @@ type SearchBarProps = {
 
 const SearchBar = (props: SearchBarProps) => {
 	const [searchString, setSearchString] = useState('');
-
-	const { clearSearch, onSearch } = props;
+	const { onSearch, clearSearch } = props;
 
 	const onInputChangeHandler = useCallback(
 		(event: ChangeEvent<HTMLInputElement>): void => {
@@ -35,7 +34,7 @@ const SearchBar = (props: SearchBarProps) => {
 				clearSearch(true);
 			}
 		},
-		[clearSearch, onSearch, searchString]
+		[searchString, clearSearch, onSearch]
 	);
 	return (
 		<form onSubmit={submitHandler} className={styles.content}>

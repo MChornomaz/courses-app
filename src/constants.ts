@@ -57,3 +57,10 @@ export const NO_COURSES = 'Courses were not found!';
 export const ADD_COURSE_BUTTON = 'Add new course';
 
 export const NO_AUTHORS_FOUND = 'Author list is empty';
+
+export const ROUTES = {
+	COURSES: '/courses',
+	ADD_COURSE: '/courses/add',
+	REGISTRATION: '/registration',
+	LOGIN: '/login',
+};
