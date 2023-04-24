@@ -12,6 +12,8 @@ import { useTypedDispatch } from './hooks/useTypedDispatch';
 import { UserLoginPayload } from './store/user/actionTypes';
 import { logInUser } from './store/user/actionCreators';
 import { getUser } from './store/selectors';
+import { ROUTES } from './constants';
+import Page404 from './components/Page404/Page404';
 
 function App() {
 	const navigate = useNavigate();
@@ -36,9 +38,9 @@ function App() {
 
 	useEffect(() => {
 		if (isLoggedIn) {
-			navigate('/courses');
+			navigate(ROUTES.COURSES);
 		} else {
-			navigate('/login');
+			navigate(ROUTES.LOGIN);
 		}
 		// eslint-disable-next-line
 	}, [isLoggedIn]);
@@ -48,18 +50,23 @@ function App() {
 			<Header />
 			<Routes>
 				{isLoggedIn && (
-					<Route path='/' element={<Navigate replace to='/courses' />} />
-				)}
-				{isLoggedIn && <Route path='/courses/*' element={<Courses />} />}
-				{isLoggedIn && (
-					<Route path={'/courses/add'} element={<CreateCourse />} />
+					<Route path='/' element={<Navigate replace to={ROUTES.COURSES} />} />
 				)}
 				{isLoggedIn && (
-					<Route path='/courses/:courseId' element={<CourseInfo />} />
+					<Route path={`${ROUTES.COURSES}/*`} element={<Courses />} />
 				)}
-				<Route path='/registration' element={<Registration />} />
-				<Route path='/login' element={<Login />} />
-				<Route path='*' element={isLoggedIn ? <Courses /> : <Login />} />
+				{isLoggedIn && (
+					<Route path={ROUTES.ADD_COURSE} element={<CreateCourse />} />
+				)}
+				{isLoggedIn && (
+					<Route
+						path={`${ROUTES.COURSES}/:courseId`}
+						element={<CourseInfo />}
+					/>
+				)}
+				<Route path={ROUTES.REGISTRATION} element={<Registration />} />
+				<Route path={ROUTES.LOGIN} element={<Login />} />
+				<Route path='*' element={isLoggedIn ? <Page404 /> : <Login />} />
 			</Routes>
 		</div>
 	);

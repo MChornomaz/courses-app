@@ -58,6 +58,13 @@ export const ADD_COURSE_BUTTON = 'Add new course';
 
 export const NO_AUTHORS_FOUND = 'Author list is empty';
 
+export const ROUTES = {
+	COURSES: '/courses',
+	ADD_COURSE: '/courses/add',
+	REGISTRATION: '/registration',
+	LOGIN: '/login',
+};
+
 //API URLs
 
 export const GET_AUTHORS_URL = 'http://localhost:4000/authors/all';

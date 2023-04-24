@@ -7,7 +7,7 @@ type FetchError = {
 };
 
 type HookState = {
-	data: any | null;
+	data: any;
 	error: FetchError | string | null | undefined;
 	status: string | null;
 };

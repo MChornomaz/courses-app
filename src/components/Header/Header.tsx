@@ -18,11 +18,9 @@ const Header = () => {
 	const location = useLocation();
 	const urlSlug = location.pathname;
 	let showControls: boolean;
-	if (urlSlug === '/login' || urlSlug === '/registration') {
-		showControls = false;
-	} else {
-		showControls = true;
-	}
+	urlSlug === '/login' || urlSlug === '/registration'
+		? (showControls = false)
+		: (showControls = true);
 
 	const logOutHandler = useCallback(() => {
 		dispatch(logOutUser());
