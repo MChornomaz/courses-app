@@ -14,6 +14,7 @@ import { logInUserAction } from './store/user/actionCreators';
 import { getUser } from './store/selectors';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import { ROUTES } from './constants';
+import Page404 from './components/Page404/Page404';
 
 function App() {
 	const navigate = useNavigate();
@@ -82,7 +83,7 @@ function App() {
 				)}
 				<Route path={ROUTES.REGISTRATION} element={<Registration />} />
 				<Route path={ROUTES.LOGIN} element={<Login />} />
-				<Route path='*' element={isLoggedIn ? <Courses /> : <Login />} />
+				<Route path='*' element={isLoggedIn ? <Page404 /> : <Login />} />
 			</Routes>
 		</div>
 	);
