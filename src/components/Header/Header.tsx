@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 
 import Button from '../../common/Button/Button';
 import Logo from './components/Logo/Logo';
+import { ROUTES } from '../../constants';
 
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';

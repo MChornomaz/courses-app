@@ -36,9 +36,8 @@ const Input: React.FC<InputProps> = (props) => {
 	return (
 		<div className={`${styles.group} ${addclass} `}>
 			<input
-				className={`${styles['form-input']} ${
-					hasError && styles['form-input--error']
-				}`}
+				className={`${styles['form-input']} ${hasError && styles['form-input--error']
+					}`}
 				id={id}
 				name={name}
 				value={value.toString()}
@@ -52,11 +51,9 @@ const Input: React.FC<InputProps> = (props) => {
 			{label && (
 				<label
 					htmlFor={id}
-					className={`${
-						props.value && props.value.length ? styles.shrink : ''
-					} ${styles['form-input-label']} ${
-						hasError && styles['form-input-label--error']
-					}`}
+					className={`${props.value && props.value.length ? styles.shrink : ''
+						} ${styles['form-input-label']} ${hasError && styles['form-input-label--error']
+						}`}
 				>
 					{label}
 				</label>

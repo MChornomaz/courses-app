@@ -15,7 +15,6 @@ const CourseInfo = () => {
 	const course: Course | undefined = courses.find(
 		(item) => item.id === courseId
 	);
-
 	const durationString = course ? pipeDuration(course.duration) : '';
 
 	const { authors } = useTypedSelector(getAllAuthors);

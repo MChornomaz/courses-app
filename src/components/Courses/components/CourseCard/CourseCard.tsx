@@ -16,6 +16,9 @@ import CheckIcon from '../../../../static/icons/CheckIcon';
 import DeleteIcon from '../../../../static/icons/DeleteIcon';
 
 import styles from './courseCard.module.scss';
+import { ROUTES } from '../../../../constants';
+import CheckIcon from '../../../../static/icons/CheckIcon';
+import DeleteIcon from '../../../../static/icons/DeleteIcon';
 
 type CardProps = {
 	cardInfo: Course;

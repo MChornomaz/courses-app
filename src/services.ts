@@ -2,15 +2,19 @@ import { GET_AUTHORS_URL, GET_COURSES_URL, LOG_IN_URL } from './constants';
 import { User } from './types/types';
 
 export const createUser = async (url: string, data: User) => {
-	const response = await fetch(url, {
-		method: 'POST',
-		body: JSON.stringify(data),
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
-	const result = await response.json();
-	return result;
+	try {
+		const response = await fetch(url, {
+			method: 'POST',
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		const result = await response.json();
+		return result;
+	} catch (e: unknown) {
+		throw new Error(typeof e === 'string' ? e : 'Creating user failed!');
+	}
 };
 
 export const logInUserAPI = async (data: User) => {
@@ -60,6 +64,6 @@ export const fetchAllCourses = async () => {
 	if (result.successful) {
 		return result.result;
 	} else {
-		throw new Error('Authors fetch failed');
+		throw new Error('Courses fetch failed');
 	}
 };
