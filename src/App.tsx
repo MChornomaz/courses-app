@@ -21,7 +21,7 @@ function App() {
 	const token = localStorage.getItem('token');
 	const email = localStorage.getItem('email');
 	const user = useTypedSelector(getUser);
-	const isLoggedIn = user.isAuth;
+	const isLoggedIn = user ? user.isAuth : false;
 
 	const dispatch = useTypedDispatch();
 

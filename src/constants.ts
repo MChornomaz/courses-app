@@ -67,6 +67,8 @@ export const ROUTES = {
 
 //API URLs
 
-export const GET_AUTHORS_URL = 'http://localhost:4000/authors/all';
+export const SERVER_URL = 'http://localhost:4000/';
 
-export const GET_COURSES_URL = 'http://localhost:4000/courses/all';
+export const GET_AUTHORS_URL = `${SERVER_URL}authors/all`;
+
+export const GET_COURSES_URL = `${SERVER_URL}${ROUTES.COURSES}/all`;

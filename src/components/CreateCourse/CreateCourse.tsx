@@ -10,7 +10,7 @@ import dateGenerator from '../../helpers/dateGeneratop';
 import { Course, Author } from '../../types/types';
 import useInput from '../../hooks/use-input';
 
-import { NO_AUTHORS_FOUND } from '../../constants';
+import { NO_AUTHORS_FOUND, ROUTES } from '../../constants';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { getAllAuthors } from './../../store/selectors';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
@@ -29,7 +29,7 @@ const CreateCourse = () => {
 	const navigate = useNavigate();
 	const dispatch = useTypedDispatch();
 
-	const onCancel = useCallback(() => navigate('/courses'), [navigate]);
+	const onCancel = useCallback(() => navigate(ROUTES.COURSES), [navigate]);
 
 	const {
 		value: title,

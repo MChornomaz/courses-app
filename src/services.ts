@@ -12,32 +12,38 @@ export const createUser = async (url: string, data: User) => {
 		});
 		const result = await response.json();
 		return result;
-	} catch (e) {
-		console.log(e);
+	} catch (e: unknown) {
+		throw new Error(typeof e === 'string' ? e : 'Creating user failed!');
 	}
 };
 
 export const logInUserAPI = async (url: string, data: User) => {
-	const response = await fetch(url, {
-		method: 'POST',
-		body: JSON.stringify(data),
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
-	const result = await response.json();
+	try {
+		const response = await fetch(url, {
+			method: 'POST',
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		const result = await response.json();
 
-	if (result.successful) {
-		const token = result.result;
-		const userName = result.user.name;
-		const email = result.user.email;
+		if (result.successful) {
+			const token = result.result;
+			const userName = result.user.name;
+			const email = result.user.email;
 
-		localStorage.setItem('token', token);
-		localStorage.setItem('userName', userName);
-		localStorage.setItem('email', email);
+			localStorage.setItem('token', token);
+			localStorage.setItem('userName', userName);
+			localStorage.setItem('email', email);
+		}
+
+		return result;
+	} catch (e: unknown) {
+		throw new Error(
+			typeof e === 'string' ? e : 'Log in failed! Check your credentials'
+		);
 	}
-
-	return result;
 };
 
 export const fetchAllAuthors = async () => {
@@ -58,6 +64,6 @@ export const fetchAllCourses = async () => {
 	if (result.successful) {
 		return result.result;
 	} else {
-		throw new Error('Authors fetch failed');
+		throw new Error('Courses fetch failed');
 	}
 };
