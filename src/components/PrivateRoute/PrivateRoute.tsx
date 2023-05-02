@@ -1,4 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom';
+import { ROUTES } from '../../constants';
 
 export type PrivateRouteProps = {
 	user: string | null;
@@ -7,7 +8,7 @@ export type PrivateRouteProps = {
 
 const PrivateRoute = ({
 	user,
-	redirectPath = '/courses',
+	redirectPath = ROUTES.COURSES,
 }: PrivateRouteProps) => {
 	if (user !== 'admin') {
 		return <Navigate to={redirectPath} replace />;

@@ -6,26 +6,23 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { getAllAuthors, getAllCourses } from './../../store/selectors';
 
 import styles from './CourseInfo.module.scss';
+import { ROUTES } from '../../constants';
 
 const CourseInfo = () => {
 	const params = useParams();
 	const { courseId } = params;
 	const { courses } = useTypedSelector(getAllCourses);
-	const course: Course = courses.filter((item) => item.id === courseId)[0];
-	let durationString = '';
+	const course: Course | undefined = courses.find(
+		(item) => item.id === courseId
+	);
 
-	if (course) {
-		durationString = pipeDuration(course.duration);
-	}
+	const durationString = course ? pipeDuration(course.duration) : '';
 
 	const { authors } = useTypedSelector(getAllAuthors);
 
 	return (
-		<div
-			style={{ padding: '5rem 5%' }}
-			className={`wrapper ${styles['card-info']}`}
-		>
-			<NavLink to='/courses' className={styles.link}>
+		<div className={`wrapper ${styles['card-info']}`}>
+			<NavLink to={ROUTES.COURSES} className={styles.link}>
 				{' '}
 				&lt; Back to course
 			</NavLink>

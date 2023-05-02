@@ -10,6 +10,7 @@ import { getUser } from './../../store/selectors';
 import { logOutThunk } from '../../store/user/thunk';
 
 import styles from './header.module.scss';
+import { ROUTES } from '../../constants';
 
 const Header = () => {
 	const { name, isAuth, token } = useTypedSelector(getUser);
@@ -18,11 +19,9 @@ const Header = () => {
 	const location = useLocation();
 	const urlSlug = location.pathname;
 	let showControls: boolean;
-	if (urlSlug === '/login' || urlSlug === '/registration') {
-		showControls = false;
-	} else {
-		showControls = true;
-	}
+	urlSlug === '/login' || urlSlug === '/registration'
+		? (showControls = false)
+		: (showControls = true);
 
 	const logOutHandler = useCallback(() => {
 		dispatch(logOutThunk(token) as any);
@@ -32,7 +31,7 @@ const Header = () => {
 
 	return (
 		<header className={styles.header}>
-			<NavLink to='courses' className={styles.header__logo}>
+			<NavLink to={ROUTES.COURSES} className={styles.header__logo}>
 				<Logo />
 			</NavLink>
 			<div className={styles.header__content}>

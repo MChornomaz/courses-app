@@ -17,7 +17,7 @@ import { Author } from '../../types/types';
 import { CourseApi } from '../../store/types/course';
 import { AuthorApiBody } from '../../store/types/author';
 
-import { NO_AUTHORS_FOUND } from '../../constants';
+import { NO_AUTHORS_FOUND, ROUTES } from '../../constants';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import { getAllAuthors, getAllCourses } from '../../store/selectors';
@@ -37,7 +37,7 @@ const CourseForm = () => {
 	const dispatch = useTypedDispatch();
 	const { token } = useTypedSelector(getUser);
 
-	const onCancel = useCallback(() => navigate('/courses'), [navigate]);
+	const onCancel = useCallback(() => navigate(ROUTES.COURSES), [navigate]);
 
 	useEffect(() => {
 		setAuthors(authorsArray);
@@ -124,7 +124,7 @@ const CourseForm = () => {
 	const durationChangeHandler = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
 			onDurationChangeHandler(event);
-			setDurationInHours(pipeDuration(parseInt(event.target.value)));
+			setDurationInHours(pipeDuration(parseInt(event.target.value, 10)));
 		},
 		[onDurationChangeHandler]
 	);
@@ -190,7 +190,7 @@ const CourseForm = () => {
 				resetDescription();
 				resetDuration();
 				resetNewAuthor();
-				navigate('/courses');
+				navigate(ROUTES.COURSES);
 			}
 		},
 		[

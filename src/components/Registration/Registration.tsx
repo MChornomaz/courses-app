@@ -12,6 +12,7 @@ import useInput from '../../hooks/use-input';
 import { User } from '../../types/types';
 
 import styles from './Registration.module.scss';
+import { REGISTRATION_URL, ROUTES } from '../../constants';
 
 const Registration = () => {
 	const { sendRequest, status, error } = useHttp(createUser, false);
@@ -59,15 +60,12 @@ const Registration = () => {
 					email: userEmail,
 					password: userPassword,
 				};
-				const response = await sendRequest(
-					'http://localhost:4000/register',
-					newUser
-				);
+				const response = await sendRequest(REGISTRATION_URL, newUser);
 				if (response.successful) {
 					resetUserName();
 					resetUserEmail();
 					resetUserPassword();
-					navigate('/login');
+					navigate(ROUTES.LOGIN);
 				} else if (!response.successful) {
 					if (response.errors) alert(response.errors);
 					if (error) alert(error);
@@ -131,7 +129,8 @@ const Registration = () => {
 				/>
 				<Button type='submit'>Registration</Button>
 				<p className={styles.login}>
-					If you have an account you can <NavLink to='/login'>Login</NavLink>
+					If you have an account you can{' '}
+					<NavLink to={ROUTES.LOGIN}>Login</NavLink>
 				</p>
 			</form>
 		</div>

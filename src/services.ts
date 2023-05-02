@@ -14,26 +14,32 @@ export const createUser = async (url: string, data: User) => {
 };
 
 export const logInUserAPI = async (data: User) => {
-	const response = await fetch(LOG_IN_URL, {
-		method: 'POST',
-		body: JSON.stringify(data),
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
-	const result = await response.json();
+	try {
+		const response = await fetch(LOG_IN_URL, {
+			method: 'POST',
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		const result = await response.json();
 
-	if (result.successful) {
-		const token = result.result;
-		const userName = result.user.name;
-		const email = result.user.email;
+		if (result.successful) {
+			const token = result.result;
+			const userName = result.user.name;
+			const email = result.user.email;
 
-		localStorage.setItem('token', token);
-		localStorage.setItem('userName', userName);
-		localStorage.setItem('email', email);
+			localStorage.setItem('token', token);
+			localStorage.setItem('userName', userName);
+			localStorage.setItem('email', email);
+		}
+
+		return result;
+	} catch (e: unknown) {
+		throw new Error(
+			typeof e === 'string' ? e : 'Log in failed! Check your credentials'
+		);
 	}
-
-	return result;
 };
 
 export const fetchAllAuthors = async () => {

@@ -13,6 +13,7 @@ import { getUser } from './../../store/selectors';
 import { logInUserThunk } from '../../store/user/thunk';
 
 import styles from './Login.module.scss';
+import { ROUTES } from '../../constants';
 
 const Login = () => {
 	const user = useTypedSelector(getUser);
@@ -105,7 +106,7 @@ const Login = () => {
 				<Button type='submit'>Log In</Button>
 				<p className={styles.login}>
 					If you have an account you can{' '}
-					<NavLink to='/registration'>Sign Up</NavLink>
+					<NavLink to={ROUTES.REGISTRATION}>Sign Up</NavLink>
 				</p>
 			</form>
 		</div>

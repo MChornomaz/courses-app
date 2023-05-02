@@ -7,7 +7,7 @@ import SearchBar from './components/SearchBar/SearchBar';
 import Spinner from '../../common/Spinner/Spinner';
 import { Course } from '../../types/types';
 
-import { ADD_COURSE_BUTTON, NO_COURSES } from '../../constants';
+import { ADD_COURSE_BUTTON, NO_COURSES, ROUTES } from '../../constants';
 import { getAllAuthors, getAllCourses } from '../../store/selectors';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
@@ -86,8 +86,6 @@ const Courses = () => {
 					);
 				}
 				setCourses(filteredArray);
-			} else {
-				return;
 			}
 		},
 		[stateCourses]
@@ -100,9 +98,13 @@ const Courses = () => {
 	}, [clearSearch, stateCourses]);
 
 	const createCourseHandler = useCallback(
-		() => navigate('/courses/add'),
+		() => navigate(ROUTES.ADD_COURSE),
 		[navigate]
 	);
+
+	if (error) {
+		return <h2>OOOps, Something went wrong</h2>;
+	}
 
 	if (authors.authorsIsLoading || coursesLoading) {
 		return (
@@ -110,10 +112,6 @@ const Courses = () => {
 				<Spinner />
 			</div>
 		);
-	}
-
-	if (error) {
-		return <h2>OOOps, Something went wrong</h2>;
 	}
 
 	return (
