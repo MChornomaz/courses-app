@@ -51,6 +51,10 @@
         transform: scale(0.98);
 
     }
+
+    &:hover svg path {
+        fill: #000000;
+    }
 }
 
 

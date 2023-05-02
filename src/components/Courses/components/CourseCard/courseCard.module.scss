@@ -38,4 +38,13 @@
         margin-bottom: 2.5rem;
         font-weight: 700;
     }
+
+    &__buttons {
+        display: flex;
+        align-items: center;
+
+        & button {
+            margin-right: 20px;
+        }
+    }
 }

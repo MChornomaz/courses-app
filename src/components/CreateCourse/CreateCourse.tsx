@@ -10,23 +10,26 @@ import dateGenerator from '../../helpers/dateGeneratop';
 import { Course, Author } from '../../types/types';
 import useInput from '../../hooks/use-input';
 
-import {
-	mockedAuthorsList,
-	mockedCoursesList,
-	NO_AUTHORS_FOUND,
-	ROUTES,
-} from '../../constants';
+import { NO_AUTHORS_FOUND, ROUTES } from '../../constants';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { getAllAuthors } from './../../store/selectors';
+import { useTypedDispatch } from '../../hooks/useTypedDispatch';
+import { addAuthor } from '../../store/authors/actionCreators';
+import { addCourse } from '../../store/courses/actionCreators';
 
 import styles from './createCourse.module.scss';
 
 const CreateCourse = () => {
-	const [authors, setAuthors] = useState<Author[]>(mockedAuthorsList);
+	const authorsState = useTypedSelector(getAllAuthors);
+
+	const [authors, setAuthors] = useState<Author[]>(authorsState.authors);
 	const [selectedAuthors, setSelectedAuthors] = useState<Author[]>([]);
 	const [durationInHours, setDurationInHours] = useState('00:00');
 
 	const navigate = useNavigate();
+	const dispatch = useTypedDispatch();
 
-	const onCancel = () => navigate(ROUTES.COURSES);
+	const onCancel = useCallback(() => navigate(ROUTES.COURSES), [navigate]);
 
 	const {
 		value: title,
@@ -70,12 +73,13 @@ const CreateCourse = () => {
 			name: newAuthor,
 		};
 		if (newAuthorIsValid) {
-			mockedAuthorsList.push(createdAuthor);
+			dispatch(addAuthor(createdAuthor));
+			setAuthors((prevState) => [...prevState, createdAuthor]);
 			resetNewAuthor();
 		} else {
 			alert('Authors name must be longer than 2 characters');
 		}
-	}, [newAuthor, newAuthorIsValid, resetNewAuthor]);
+	}, [newAuthor, newAuthorIsValid, resetNewAuthor, dispatch]);
 
 	const durationChangeHandler = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
@@ -138,7 +142,7 @@ const CreateCourse = () => {
 					duration: +duration,
 					authors: authorsList,
 				};
-				mockedCoursesList.push(newCourse);
+				dispatch(addCourse(newCourse));
 				resetTitle();
 				resetDescription();
 				resetDuration();
@@ -160,6 +164,7 @@ const CreateCourse = () => {
 			title,
 			titleHasError,
 			navigate,
+			dispatch,
 		]
 	);
 

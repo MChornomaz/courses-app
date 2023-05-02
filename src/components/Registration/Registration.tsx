@@ -2,14 +2,13 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
 
 import useHttp from '../../hooks/use-http';
-import createUser from './../../api/create-user';
+import { createUser } from './../../services';
 
 import Input from '../../common/Input/Input';
 import Button from '../../common/Button/Button';
+import Spinner from '../../common/Spinner/Spinner';
 import { User } from '../../types/types';
 import useInput from '../../hooks/use-input';
-import Spinner from '../../common/Spinner/Spinner';
-import { ROUTES } from '../../constants';
 
 import styles from './Registration.module.scss';
 

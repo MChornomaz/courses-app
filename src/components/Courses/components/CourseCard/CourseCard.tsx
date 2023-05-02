@@ -1,13 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 import { useMemo, useCallback } from 'react';
 
-import { ROUTES, mockedAuthorsList } from '../../../../constants';
+import Button from '../../../../common/Button/Button';
 
 import pipeDuration from '../../../../helpers/pipeDuration';
 import { Course, Author } from '../../../../types/types';
-import Button from '../../../../common/Button/Button';
+import { useTypedSelector } from '../../../../hooks/useTypedSelector';
+import { getAllAuthors } from '../../../../store/selectors';
+import { useTypedDispatch } from '../../../../hooks/useTypedDispatch';
+import { deleteCourse } from '../../../../store/courses/actionCreators';
 
 import styles from './courseCard.module.scss';
+import { ROUTES } from '../../../../constants';
+import CheckIcon from '../../../../static/icons/CheckIcon';
+import DeleteIcon from '../../../../static/icons/DeleteIcon';
 
 type CardProps = {
 	cardInfo: Course;
@@ -17,30 +23,39 @@ const CourseCard: React.FC<CardProps> = ({ cardInfo }) => {
 	const { id, title, duration, creationDate, authors } = cardInfo;
 	let { description } = cardInfo;
 
+	let { authors: authorsArray } = useTypedSelector(getAllAuthors);
+
 	const navigate = useNavigate();
+	const dispatch = useTypedDispatch();
 
 	const authorArr = useMemo(() => {
 		let newAuthorArr: Author[] = [];
 
-		authors.forEach((author) => {
-			newAuthorArr.push(...mockedAuthorsList.filter((el) => el.id === author));
-		});
+		if (authors) {
+			authors.forEach((author) => {
+				newAuthorArr.push(...authorsArray.filter((el) => el.id === author));
+			});
+		}
 		return newAuthorArr;
-	}, [authors]);
+	}, [authors, authorsArray]);
 
 	const courseAuthorsArr = authorArr.map((el) => el.name);
 	const courseAuthors = courseAuthorsArr.join(', ');
 	const courseDuration = pipeDuration(duration);
 
-	const buttonClickHandler = useCallback(() => {
+	const showCourseInfoHandler = useCallback(() => {
 		navigate(`${ROUTES.COURSES}/${id}`);
 	}, [id, navigate]);
+
+	const deleteCourseHandler = useCallback(() => {
+		dispatch(deleteCourse(id));
+	}, [dispatch, id]);
 
 	const cutString = useCallback((str: string, number: number) => {
 		return str.slice(0, number);
 	}, []);
 
-	if (description.length > 420) {
+	if (description && description.length > 420) {
 		description = cutString(description, 420) + '...';
 	}
 
@@ -63,7 +78,16 @@ const CourseCard: React.FC<CardProps> = ({ cardInfo }) => {
 					<span className={styles.card__heading}>Created: </span>
 					<span>{creationDate}</span>
 				</p>
-				<Button onClick={buttonClickHandler}>Show course</Button>
+				<div className={styles.card__buttons}>
+					<Button onClick={showCourseInfoHandler}>Show course</Button>
+					<Button>
+						<CheckIcon />
+					</Button>
+
+					<Button onClick={deleteCourseHandler}>
+						<DeleteIcon />
+					</Button>
+				</div>
 			</div>
 		</div>
 	);

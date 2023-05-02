@@ -64,3 +64,11 @@ export const ROUTES = {
 	REGISTRATION: '/registration',
 	LOGIN: '/login',
 };
+
+//API URLs
+
+export const SERVER_URL = 'http://localhost:4000/';
+
+export const GET_AUTHORS_URL = `${SERVER_URL}authors/all`;
+
+export const GET_COURSES_URL = `${SERVER_URL}${ROUTES.COURSES}/all`;

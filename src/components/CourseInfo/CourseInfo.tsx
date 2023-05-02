@@ -1,18 +1,22 @@
 import { useParams, NavLink } from 'react-router-dom';
 import { Course } from '../../types/types';
-import { mockedCoursesList, mockedAuthorsList } from '../../constants';
+
 import pipeDuration from '../../helpers/pipeDuration';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { getAllAuthors, getAllCourses } from './../../store/selectors';
 
 import styles from './CourseInfo.module.scss';
 
 const CourseInfo = () => {
 	const params = useParams();
 	const { courseId } = params;
-	const course: Course | undefined = mockedCoursesList.find(
+	const { courses } = useTypedSelector(getAllCourses);
+	const course: Course | undefined = courses.find(
 		(item) => item.id === courseId
 	);
-
 	const durationString = course ? pipeDuration(course.duration) : '';
+
+	const { authors } = useTypedSelector(getAllAuthors);
 
 	return (
 		<div className={`wrapper ${styles['card-info']}`}>
@@ -48,9 +52,7 @@ const CourseInfo = () => {
 							</p>
 							<ul className={styles['card-info__authors']}>
 								{course.authors.map((authorId) => {
-									const author = mockedAuthorsList.filter(
-										(el) => el.id === authorId
-									)[0];
+									const author = authors.filter((el) => el.id === authorId)[0];
 									if (!author) {
 										return null;
 									}
