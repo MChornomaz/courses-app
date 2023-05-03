@@ -16,9 +16,7 @@ import CheckIcon from '../../../../static/icons/CheckIcon';
 import DeleteIcon from '../../../../static/icons/DeleteIcon';
 
 import styles from './courseCard.module.scss';
-import { ROUTES } from '../../../../constants';
-import CheckIcon from '../../../../static/icons/CheckIcon';
-import DeleteIcon from '../../../../static/icons/DeleteIcon';
+import userIsAdmin from '../../../../helpers/userisAdmin';
 
 type CardProps = {
 	cardInfo: Course;
@@ -27,12 +25,14 @@ type CardProps = {
 const CourseCard: React.FC<CardProps> = ({ cardInfo }) => {
 	const { id, title, duration, creationDate, authors } = cardInfo;
 	let { description } = cardInfo;
-	const userRole = useTypedSelector(getUser).role;
+	const user = useTypedSelector(getUser);
 	let { authors: authorsArray } = useTypedSelector(getAllAuthors);
 	const { token } = useTypedSelector(getUser);
 
 	const navigate = useNavigate();
 	const dispatch = useTypedDispatch();
+
+	const isAdmin = userIsAdmin(user);
 
 	const authorArr = useMemo(() => {
 		let newAuthorArr: Author[] = [];
@@ -93,7 +93,7 @@ const CourseCard: React.FC<CardProps> = ({ cardInfo }) => {
 				</p>
 				<div className={styles.card__buttons}>
 					<Button onClick={showCourseInfoHandler}>Show course</Button>
-					{userRole === 'admin' && (
+					{isAdmin && (
 						<>
 							<Button onClick={updateCourseHandler}>
 								<CheckIcon />

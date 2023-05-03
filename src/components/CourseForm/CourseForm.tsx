@@ -80,30 +80,32 @@ const CourseForm = () => {
 		valueChangeHandler: onDurationChangeHandler,
 		inputBlurHandler: durationBlurHandler,
 		reset: resetDuration,
-	} = useInput((value) => +value > 0);
+	} = useInput((value) => parseInt(value, 10) > 0);
 
-	const courseId = useParams().courseId;
+	const { courseId } = useParams();
 	const { courses } = useTypedSelector(getAllCourses);
 
 	useEffect(() => {
 		if (courseId) {
-			const course = courses.filter((course) => course.id === courseId)[0];
-			const filteredAuthors = course.authors.map((el) =>
-				authors.filter((item) => item.id === el)
-			);
-			const courseAuthors = filteredAuthors.flat();
-			setTitle(course.title);
-			setDescription(course.description);
-			setDuration(course.duration.toLocaleString());
-			setSelectedAuthors(courseAuthors);
+			const course = courses.find((course) => course.id === courseId);
+			if (course) {
+				const filteredAuthors = course.authors.map((el) =>
+					authors.filter((item) => item.id === el)
+				);
+				const courseAuthors = filteredAuthors.flat();
+				setTitle(course.title);
+				setDescription(course.description);
+				setDuration(course.duration.toLocaleString());
+				setSelectedAuthors(courseAuthors);
+			}
 		}
-		// eslint-disable-next-line
-	}, [courses, courseId]);
+	}, [courses, courseId, authors]);
 
 	const createAuthorHandler = useCallback(() => {
 		const createdAuthor: AuthorApiBody = {
 			name: newAuthor,
 		};
+
 		if (newAuthorIsValid) {
 			dispatch(addNewAuthor(createdAuthor, token) as any);
 			setAuthors(authorsArray);
@@ -175,7 +177,7 @@ const CourseForm = () => {
 				const newCourse: CourseApi = {
 					title: title,
 					description: description,
-					duration: parseInt(duration),
+					duration: parseInt(duration, 10),
 					authors: authorsList,
 				};
 
@@ -230,8 +232,9 @@ const CourseForm = () => {
 						required
 					/>
 					<div className={styles['course-form__buttons']}>
-						{!courseId && <Button type='submit'>Create course</Button>}
-						{courseId && <Button type='submit'>Update course</Button>}
+						<Button type='submit'>
+							{courseId ? 'Update course' : 'Create course'}
+						</Button>
 						<Button onClick={onCancel} invert={true} type='button'>
 							Cancel
 						</Button>

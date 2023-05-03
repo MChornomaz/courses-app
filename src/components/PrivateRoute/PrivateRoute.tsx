@@ -2,15 +2,15 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 
 export type PrivateRouteProps = {
-	user: string | null;
+	userRole: string | null;
 	redirectPath: string;
 };
 
 const PrivateRoute = ({
-	user,
+	userRole,
 	redirectPath = ROUTES.COURSES,
 }: PrivateRouteProps) => {
-	if (user !== 'admin') {
+	if (userRole !== 'admin') {
 		return <Navigate to={redirectPath} replace />;
 	}
 

@@ -63,7 +63,7 @@ function App() {
 				)}
 				{isLoggedIn && (
 					<Route
-						element={<PrivateRoute user={role} redirectPath={ROUTES.COURSES} />}
+						element={<PrivateRoute userRole={role} redirectPath={ROUTES.COURSES} />}
 					>
 						<Route path={`${ROUTES.ADD_COURSE}`} element={<CourseForm />} />
 					</Route>
