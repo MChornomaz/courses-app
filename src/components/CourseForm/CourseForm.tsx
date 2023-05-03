@@ -17,7 +17,7 @@ import { Author } from '../../types/types';
 import { CourseApi } from '../../store/types/course';
 import { AuthorApiBody } from '../../store/types/author';
 
-import { NO_AUTHORS_FOUND } from '../../constants';
+import { NO_AUTHORS_FOUND, ROUTES } from '../../constants';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import { getAllAuthors, getAllCourses } from '../../store/selectors';
@@ -37,7 +37,7 @@ const CourseForm = () => {
 	const dispatch = useTypedDispatch();
 	const { token } = useTypedSelector(getUser);
 
-	const onCancel = useCallback(() => navigate('/courses'), [navigate]);
+	const onCancel = useCallback(() => navigate(ROUTES.COURSES), [navigate]);
 
 	useEffect(() => {
 		setAuthors(authorsArray);
@@ -80,24 +80,25 @@ const CourseForm = () => {
 		valueChangeHandler: onDurationChangeHandler,
 		inputBlurHandler: durationBlurHandler,
 		reset: resetDuration,
-	} = useInput((value) => +value > 0);
+	} = useInput((value) => parseInt(value, 10) > 0);
 
-	const courseId = useParams().courseId;
+	const { courseId } = useParams();
 	const { courses } = useTypedSelector(getAllCourses);
 
 	useEffect(() => {
 		if (courseId) {
-			const course = courses.filter((course) => course.id === courseId)[0];
-			const filteredAuthors = course.authors.map((el) =>
-				authors.filter((item) => item.id === el)
-			);
-			const courseAuthors = filteredAuthors.flat();
-			setTitle(course.title);
-			setDescription(course.description);
-			setDuration(course.duration.toLocaleString());
-			setSelectedAuthors(courseAuthors);
+			const course = courses.find((course) => course.id === courseId);
+			if (course) {
+				const filteredAuthors = course.authors.map((el) =>
+					authors.filter((item) => item.id === el)
+				);
+				const courseAuthors = filteredAuthors.flat();
+				setTitle(course.title);
+				setDescription(course.description);
+				setDuration(course.duration.toLocaleString());
+				setSelectedAuthors(courseAuthors);
+			}
 		}
-		// eslint-disable-next-line
 	}, [courses, courseId]);
 
 	const createAuthorHandler = useCallback(() => {
@@ -124,7 +125,7 @@ const CourseForm = () => {
 	const durationChangeHandler = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
 			onDurationChangeHandler(event);
-			setDurationInHours(pipeDuration(parseInt(event.target.value)));
+			setDurationInHours(pipeDuration(parseInt(event.target.value, 10)));
 		},
 		[onDurationChangeHandler]
 	);
@@ -176,7 +177,7 @@ const CourseForm = () => {
 				const newCourse: CourseApi = {
 					title: title,
 					description: description,
-					duration: parseInt(duration),
+					duration: parseInt(duration, 10),
 					authors: authorsList,
 				};
 
@@ -190,7 +191,7 @@ const CourseForm = () => {
 				resetDescription();
 				resetDuration();
 				resetNewAuthor();
-				navigate('/courses');
+				navigate(ROUTES.COURSES);
 			}
 		},
 		[
@@ -235,8 +236,9 @@ const CourseForm = () => {
 						required
 					/>
 					<div className={styles['course-form__buttons']}>
-						{!courseId && <Button type='submit'>Create course</Button>}
-						{courseId && <Button type='submit'>Update course</Button>}
+						<Button type='submit'>
+							{courseId ? 'Update course' : 'Create course'}
+						</Button>
 						<Button onClick={onCancel} invert={true} type='button'>
 							Cancel
 						</Button>

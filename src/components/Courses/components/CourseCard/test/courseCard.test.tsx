@@ -2,6 +2,7 @@ import { screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { renderWithProviders } from '../../../../../helpers/test-utils';
 import CourseCard from '../CourseCard';
+import { ROUTES } from '../../../../../constants';
 
 const mockedState = {
 	user: {
@@ -95,7 +96,7 @@ const mockedState = {
 describe('HEADER', () => {
 	test('renders title', () => {
 		renderWithProviders(
-			<MemoryRouter initialEntries={['/courses']}>
+			<MemoryRouter initialEntries={[ROUTES.COURSES]}>
 				<CourseCard cardInfo={mockedState.courses.courses[0]} />
 			</MemoryRouter>,
 			{
@@ -114,7 +115,7 @@ describe('HEADER', () => {
 
 	test('renders description', () => {
 		renderWithProviders(
-			<MemoryRouter initialEntries={['/courses']}>
+			<MemoryRouter initialEntries={[ROUTES.COURSES]}>
 				<CourseCard cardInfo={mockedState.courses.courses[0]} />
 			</MemoryRouter>,
 			{
@@ -133,7 +134,7 @@ describe('HEADER', () => {
 
 	test('renders duration', () => {
 		renderWithProviders(
-			<MemoryRouter initialEntries={['/courses']}>
+			<MemoryRouter initialEntries={[ROUTES.COURSES]}>
 				<CourseCard cardInfo={mockedState.courses.courses[0]} />
 			</MemoryRouter>,
 			{
@@ -153,7 +154,7 @@ describe('HEADER', () => {
 
 	test('renders authors', () => {
 		renderWithProviders(
-			<MemoryRouter initialEntries={['/courses']}>
+			<MemoryRouter initialEntries={[ROUTES.COURSES]}>
 				<CourseCard cardInfo={mockedState.courses.courses[0]} />
 			</MemoryRouter>,
 			{
@@ -172,7 +173,7 @@ describe('HEADER', () => {
 
 	test('renders creation date', () => {
 		renderWithProviders(
-			<MemoryRouter initialEntries={['/courses']}>
+			<MemoryRouter initialEntries={[ROUTES.COURSES]}>
 				<CourseCard cardInfo={mockedState.courses.courses[0]} />
 			</MemoryRouter>,
 			{

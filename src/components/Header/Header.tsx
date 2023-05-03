@@ -8,6 +8,7 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import { getUser } from './../../store/selectors';
 import { logOutThunk } from '../../store/user/thunk';
+import { ROUTES } from '../../constants';
 
 import styles from './header.module.scss';
 
@@ -18,11 +19,9 @@ const Header = () => {
 	const location = useLocation();
 	const urlSlug = location.pathname;
 	let showControls: boolean;
-	if (urlSlug === '/login' || urlSlug === '/registration') {
-		showControls = false;
-	} else {
-		showControls = true;
-	}
+	urlSlug === ROUTES.LOGIN || urlSlug === ROUTES.REGISTRATION
+		? (showControls = false)
+		: (showControls = true);
 
 	const logOutHandler = useCallback(() => {
 		dispatch(logOutThunk(token) as any);

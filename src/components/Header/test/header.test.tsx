@@ -2,6 +2,7 @@ import { screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { renderWithProviders } from '../../../helpers/test-utils';
 import Header from '../Header';
+import { ROUTES } from '../../../constants';
 
 const mockedState = {
 	user: {
@@ -20,7 +21,7 @@ const mockedState = {
 describe('HEADER', () => {
 	test('renders user logo', () => {
 		renderWithProviders(
-			<MemoryRouter initialEntries={['/courses']}>
+			<MemoryRouter initialEntries={[ROUTES.COURSES]}>
 				<Header />
 			</MemoryRouter>,
 			{
@@ -35,7 +36,7 @@ describe('HEADER', () => {
 
 	test('renders user NAME', async () => {
 		renderWithProviders(
-			<MemoryRouter initialEntries={['/courses']}>
+			<MemoryRouter initialEntries={[ROUTES.COURSES]}>
 				<Header />
 			</MemoryRouter>,
 			{

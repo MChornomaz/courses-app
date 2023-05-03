@@ -60,20 +60,29 @@ export const NO_AUTHORS_FOUND = 'Author list is empty';
 
 //API URLs
 
-export const GET_AUTHORS_URL = 'http://localhost:4000/authors/all';
+export const GET_AUTHORS_URL = `${process.env.REACT_APP_SERVER_URL}/authors/all`;
 
-export const GET_COURSES_URL = 'http://localhost:4000/courses/all';
+export const GET_COURSES_URL = `${process.env.REACT_APP_SERVER_URL}/courses/all`;
 
-export const GET_CURRENT_USER_URL = 'http://localhost:4000/users/me';
+export const GET_CURRENT_USER_URL = `${process.env.REACT_APP_SERVER_URL}/users/me`;
 
-export const LOG_IN_URL = 'http://localhost:4000/login';
+export const LOG_IN_URL = `${process.env.REACT_APP_SERVER_URL}/login`;
 
-export const LOG_OUT_URL = 'http://localhost:4000/logout';
+export const LOG_OUT_URL = `${process.env.REACT_APP_SERVER_URL}/logout`;
 
-export const ADD_COURSE_URL = 'http://localhost:4000/courses/add';
+export const ADD_COURSE_URL = `${process.env.REACT_APP_SERVER_URL}/courses/add`;
 
-export const ADD_AUTHOR_URL = 'http://localhost:4000/authors/add';
+export const ADD_AUTHOR_URL = `${process.env.REACT_APP_SERVER_URL}/authors/add`;
 
-export const DELETE_COURSE_URL = 'http://localhost:4000/courses/';
+export const DELETE_COURSE_URL = `${process.env.REACT_APP_SERVER_URL}/courses/`;
 
-export const UPDATE_COURSE_URL = 'http://localhost:4000/courses/';
+export const UPDATE_COURSE_URL = `${process.env.REACT_APP_SERVER_URL}/courses/`;
+
+export const ROUTES = {
+	COURSES: '/courses',
+	ADD_COURSE: '/courses/add',
+	UPDATE_COURSE: '/courses/update',
+	REGISTRATION: '/registration',
+	LOGIN: '/login',
+	LOGOUT: '/logout',
+};

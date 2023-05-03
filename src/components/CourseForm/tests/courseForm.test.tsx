@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { renderWithProviders } from '../../../helpers/test-utils';
 import CourseForm from './../CourseForm';
 import { useDispatch } from 'react-redux';
+import { ROUTES } from '../../../constants';
 
 jest.mock('react-redux', () => ({
 	...jest.requireActual('react-redux'),
@@ -84,7 +85,7 @@ const mockedState = {
 describe('COURSE FORM', () => {
 	test('renders authors lists', async () => {
 		renderWithProviders(
-			<MemoryRouter initialEntries={['/courses/add']}>
+			<MemoryRouter initialEntries={[ROUTES.ADD_COURSE]}>
 				<CourseForm />
 			</MemoryRouter>,
 			{
@@ -113,7 +114,7 @@ describe('COURSE FORM', () => {
 
 	test('Create author button must call dispatch', async () => {
 		renderWithProviders(
-			<MemoryRouter initialEntries={['/courses/add']}>
+			<MemoryRouter initialEntries={[ROUTES.ADD_COURSE]}>
 				<CourseForm />
 			</MemoryRouter>,
 			{
@@ -136,7 +137,7 @@ describe('COURSE FORM', () => {
 
 	test('Add author button click adds an author to course authors list', async () => {
 		renderWithProviders(
-			<MemoryRouter initialEntries={['/courses/add']}>
+			<MemoryRouter initialEntries={[ROUTES.ADD_COURSE]}>
 				<CourseForm />
 			</MemoryRouter>,
 			{
@@ -166,7 +167,7 @@ describe('COURSE FORM', () => {
 
 	test('Delete author button click should delete an author from the course list', async () => {
 		renderWithProviders(
-			<MemoryRouter initialEntries={['/courses/add']}>
+			<MemoryRouter initialEntries={[ROUTES.ADD_COURSE]}>
 				<CourseForm />
 			</MemoryRouter>,
 			{

@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 
 import useHttp from '../../hooks/use-http';
 import { createUser } from './../../services';
+import { ROUTES } from '../../constants';
 
 import Input from '../../common/Input/Input';
 import Button from '../../common/Button/Button';
@@ -60,14 +61,14 @@ const Registration = () => {
 					password: userPassword,
 				};
 				const response = await sendRequest(
-					'http://localhost:4000/register',
+					`${process.env.REACT_APP_SERVER_URL}/register`,
 					newUser
 				);
 				if (response.successful) {
 					resetUserName();
 					resetUserEmail();
 					resetUserPassword();
-					navigate('/login');
+					navigate(ROUTES.LOGIN);
 				} else if (!response.successful) {
 					if (response.errors) alert(response.errors);
 					if (error) alert(error);
@@ -131,7 +132,8 @@ const Registration = () => {
 				/>
 				<Button type='submit'>Registration</Button>
 				<p className={styles.login}>
-					If you have an account you can <NavLink to='/login'>Login</NavLink>
+					If you have an account you can{' '}
+					<NavLink to={ROUTES.LOGIN}>Login</NavLink>
 				</p>
 			</form>
 		</div>

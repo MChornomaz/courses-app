@@ -2,7 +2,7 @@ import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { renderWithProviders } from '../../../helpers/test-utils';
 import Courses from '../Courses';
-import { NO_COURSES } from './../../../constants';
+import { NO_COURSES, ROUTES } from './../../../constants';
 import { fetchAllCourses } from '../../../services';
 
 const mockedState = {
@@ -100,7 +100,7 @@ jest.mock('../../../services', () => ({
 describe('COURSES', () => {
 	test('renders CourseCard amount equal length of courses array', async () => {
 		renderWithProviders(
-			<MemoryRouter initialEntries={['/courses']}>
+			<MemoryRouter initialEntries={[ROUTES.COURSES]}>
 				<Courses />
 			</MemoryRouter>,
 			{
@@ -120,7 +120,7 @@ describe('COURSES', () => {
 		(fetchAllCourses as jest.Mock).mockReturnValueOnce([]);
 
 		renderWithProviders(
-			<MemoryRouter initialEntries={['/courses']}>
+			<MemoryRouter initialEntries={[ROUTES.COURSES]}>
 				<Courses />
 			</MemoryRouter>,
 			{
@@ -143,7 +143,7 @@ describe('COURSES', () => {
 
 	test('renders CourseForm after click on button Add new course', async () => {
 		renderWithProviders(
-			<MemoryRouter initialEntries={['/courses/']}>
+			<MemoryRouter initialEntries={[ROUTES.COURSES]}>
 				<Courses />
 			</MemoryRouter>,
 			{

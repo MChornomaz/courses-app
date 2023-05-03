@@ -11,6 +11,7 @@ import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { getUser } from './../../store/selectors';
 import { logInUserThunk } from '../../store/user/thunk';
+import { ROUTES } from '../../constants';
 
 import styles from './Login.module.scss';
 
@@ -105,7 +106,7 @@ const Login = () => {
 				<Button type='submit'>Log In</Button>
 				<p className={styles.login}>
 					If you have an account you can{' '}
-					<NavLink to='/registration'>Sign Up</NavLink>
+					<NavLink to={ROUTES.REGISTRATION}>Sign Up</NavLink>
 				</p>
 			</form>
 		</div>

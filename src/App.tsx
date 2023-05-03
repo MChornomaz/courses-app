@@ -7,12 +7,14 @@ import Registration from './components/Registration/Registration';
 import Login from './components/Login/Login';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 import CourseForm from './components/CourseForm/CourseForm';
+import Page404 from './common/Page404/Page404';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import { useTypedSelector } from './hooks/useTypedSelector';
 import { useTypedDispatch } from './hooks/useTypedDispatch';
 import { UserLoginPayload } from './store/user/actionTypes';
 import { logInUserAction } from './store/user/actionCreators';
 import { getUser } from './store/selectors';
-import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+import { ROUTES } from './constants';
 
 function App() {
 	const navigate = useNavigate();
@@ -21,7 +23,7 @@ function App() {
 	const email = localStorage.getItem('email');
 	const role = localStorage.getItem('role');
 	const user = useTypedSelector(getUser);
-	const isLoggedIn = user.isAuth;
+	const isLoggedIn = user ? user.isAuth : false;
 
 	const dispatch = useTypedDispatch();
 
@@ -39,11 +41,10 @@ function App() {
 
 	useEffect(() => {
 		if (isLoggedIn) {
-			navigate('/courses');
+			navigate(ROUTES.COURSES);
 		} else {
-			navigate('/login');
+			navigate(ROUTES.LOGIN);
 		}
-		// eslint-disable-next-line
 	}, [isLoggedIn]);
 
 	return (
@@ -51,24 +52,36 @@ function App() {
 			<Header />
 			<Routes>
 				{isLoggedIn && (
-					<Route path='/' element={<Navigate replace to='/courses' />} />
+					<Route path='/' element={<Navigate replace to={ROUTES.COURSES} />} />
 				)}
-				{isLoggedIn && <Route path='/courses/*' element={<Courses />} />}
 				{isLoggedIn && (
-					<Route element={<PrivateRoute user={role} redirectPath='/courses' />}>
-						<Route path={'/courses/add'} element={<CourseForm />} />
+					<Route path={`${ROUTES.COURSES}/*`} element={<Courses />} />
+				)}
+				{isLoggedIn && (
+					<Route
+						element={
+							<PrivateRoute userRole={role} redirectPath={ROUTES.COURSES} />
+						}
+					>
+						<Route path={ROUTES.ADD_COURSE} element={<CourseForm />} />
 					</Route>
 				)}
 
 				{isLoggedIn && (
-					<Route path='/courses/:courseId' element={<CourseInfo />} />
+					<Route
+						path={`${ROUTES.COURSES}/:courseId`}
+						element={<CourseInfo />}
+					/>
 				)}
 				{isLoggedIn && (
-					<Route path='/courses/update/:courseId' element={<CourseForm />} />
+					<Route
+						path={`${ROUTES.UPDATE_COURSE}/:courseId`}
+						element={<CourseForm />}
+					/>
 				)}
-				<Route path='/registration' element={<Registration />} />
-				<Route path='/login' element={<Login />} />
-				<Route path='*' element={isLoggedIn ? <Courses /> : <Login />} />
+				<Route path={ROUTES.REGISTRATION} element={<Registration />} />
+				<Route path={ROUTES.LOGIN} element={<Login />} />
+				<Route path='*' element={isLoggedIn ? <Page404 /> : <Login />} />
 			</Routes>
 		</div>
 	);
