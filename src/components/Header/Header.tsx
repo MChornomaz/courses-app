@@ -3,12 +3,15 @@ import { useCallback } from 'react';
 
 import Button from '../../common/Button/Button';
 import Logo from './components/Logo/Logo';
+import { ROUTES } from '../../constants';
 
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import { getUser } from './../../store/selectors';
 import { logOutThunk } from '../../store/user/thunk';
 import { ROUTES } from '../../constants';
+
+import styles from './header.module.scss';
 
 import styles from './header.module.scss';
 

@@ -68,6 +68,43 @@ const Courses = () => {
 		receiveAllCourses();
 	}, [dispatch]);
 
+	const authors = useTypedSelector(getAllAuthors);
+	const dispatch = useTypedDispatch();
+
+	useEffect(() => {
+		const receiveAllAuthors = async () => {
+			try {
+				dispatch(loadAuthors());
+				const authorArr = await fetchAllAuthors();
+				dispatch(getAuthors(authorArr));
+			} catch (e) {
+				dispatch(setAuthorsError('Fetching authors failed'));
+			}
+		};
+		// if check was made to make app work correctly
+		//and will be removed after adding proper add author to API functionality in the next homework
+
+		if (authors.authors.length === 0) {
+			receiveAllAuthors();
+		}
+	}, [dispatch, authors.authors.length]);
+
+	useEffect(() => {
+		const receiveAllCourses = async () => {
+			try {
+				dispatch(courseIsLoading());
+				const coursesArr = await fetchAllCourses();
+				dispatch(getCourses(coursesArr));
+			} catch (e) {
+				dispatch(setCourseFetchError('Failed to fetch courses'));
+			}
+		};
+
+		if (stateCourses.length === 0) {
+			receiveAllCourses();
+		}
+	}, [dispatch, stateCourses.length]);
+
 	let filteredCourses = courses;
 
 	const searchHandler = useCallback(

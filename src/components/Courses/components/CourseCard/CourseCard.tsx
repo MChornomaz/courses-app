@@ -17,6 +17,9 @@ import DeleteIcon from '../../../../static/icons/DeleteIcon';
 import { ROUTES } from '../../../../constants';
 
 import styles from './courseCard.module.scss';
+import { ROUTES } from '../../../../constants';
+import CheckIcon from '../../../../static/icons/CheckIcon';
+import DeleteIcon from '../../../../static/icons/DeleteIcon';
 
 type CardProps = {
 	cardInfo: Course;
@@ -28,6 +31,8 @@ const CourseCard: React.FC<CardProps> = ({ cardInfo }) => {
 	const user = useTypedSelector(getUser);
 	let { authors: authorsArray } = useTypedSelector(getAllAuthors);
 	const { token } = useTypedSelector(getUser);
+
+	let { authors: authorsArray } = useTypedSelector(getAllAuthors);
 
 	const navigate = useNavigate();
 	const dispatch = useTypedDispatch();
