@@ -6,6 +6,7 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { getAllAuthors, getAllCourses } from './../../store/selectors';
 
 import styles from './CourseInfo.module.scss';
+import { ROUTES } from '../../constants';
 
 const CourseInfo = () => {
 	const params = useParams();
@@ -20,7 +21,7 @@ const CourseInfo = () => {
 
 	return (
 		<div className={`wrapper ${styles['card-info']}`}>
-			<NavLink to='/courses' className={styles.link}>
+			<NavLink to={ROUTES.COURSES} className={styles.link}>
 				{' '}
 				&lt; Back to course
 			</NavLink>

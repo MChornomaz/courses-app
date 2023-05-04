@@ -1,38 +1,51 @@
-import { useState, FormEvent, ChangeEvent, useCallback } from 'react';
-import { v4 } from 'uuid';
-import { useNavigate } from 'react-router-dom';
+import {
+	useState,
+	FormEvent,
+	ChangeEvent,
+	useCallback,
+	useEffect,
+} from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
 import Textarea from '../../common/Textarea/Textarea';
 import pipeDuration from '../../helpers/pipeDuration';
-import dateGenerator from '../../helpers/dateGeneratop';
-import { Course, Author } from '../../types/types';
 import useInput from '../../hooks/use-input';
+
+import { Author } from '../../types/types';
+import { CourseApi } from '../../store/types/course';
+import { AuthorApiBody } from '../../store/types/author';
 
 import { NO_AUTHORS_FOUND, ROUTES } from '../../constants';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
-import { getAllAuthors } from './../../store/selectors';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
-import { addAuthor } from '../../store/authors/actionCreators';
-import { addCourse } from '../../store/courses/actionCreators';
+import { getAllAuthors, getAllCourses } from '../../store/selectors';
+import { getUser } from './../../store/selectors';
+import { addNewCourse, updateCourse } from '../../store/courses/thunk';
+import { addNewAuthor } from '../../store/authors/thunk';
 
-import styles from './createCourse.module.scss';
+import styles from './courseForm.module.scss';
 
-const CreateCourse = () => {
-	const authorsState = useTypedSelector(getAllAuthors);
-
-	const [authors, setAuthors] = useState<Author[]>(authorsState.authors);
+const CourseForm = () => {
+	const { authors: authorsArray } = useTypedSelector(getAllAuthors);
+	const [authors, setAuthors] = useState<Author[]>(authorsArray);
 	const [selectedAuthors, setSelectedAuthors] = useState<Author[]>([]);
 	const [durationInHours, setDurationInHours] = useState('00:00');
 
 	const navigate = useNavigate();
 	const dispatch = useTypedDispatch();
+	const { token } = useTypedSelector(getUser);
 
 	const onCancel = useCallback(() => navigate(ROUTES.COURSES), [navigate]);
 
+	useEffect(() => {
+		setAuthors(authorsArray);
+	}, [authorsArray]);
+
 	const {
 		value: title,
+		setEnteredValue: setTitle,
 		isValid: titleIsValid,
 		hasError: titleHasError,
 		valueChangeHandler: titleChangeHandler,
@@ -42,6 +55,7 @@ const CreateCourse = () => {
 
 	const {
 		value: description,
+		setEnteredValue: setDescription,
 		isValid: descriptionIsValid,
 		hasError: descriptionHasError,
 		valueChangeHandler: descriptionChangeHandler,
@@ -60,26 +74,53 @@ const CreateCourse = () => {
 
 	const {
 		value: duration,
+		setEnteredValue: setDuration,
 		isValid: durationIsValid,
 		hasError: durationHasError,
 		valueChangeHandler: onDurationChangeHandler,
 		inputBlurHandler: durationBlurHandler,
 		reset: resetDuration,
-	} = useInput((value) => +value > 0);
+	} = useInput((value) => parseInt(value, 10) > 0);
+
+	const { courseId } = useParams();
+	const { courses } = useTypedSelector(getAllCourses);
+
+	useEffect(() => {
+		if (courseId) {
+			const course = courses.find((course) => course.id === courseId);
+			if (course) {
+				const filteredAuthors = course.authors.map((el) =>
+					authors.filter((item) => item.id === el)
+				);
+				const courseAuthors = filteredAuthors.flat();
+				setTitle(course.title);
+				setDescription(course.description);
+				setDuration(course.duration.toLocaleString());
+				setSelectedAuthors(courseAuthors);
+			}
+		}
+	}, [courses, courseId, authors]);
 
 	const createAuthorHandler = useCallback(() => {
-		const createdAuthor: Author = {
-			id: v4(),
+		const createdAuthor: AuthorApiBody = {
 			name: newAuthor,
 		};
+
 		if (newAuthorIsValid) {
-			dispatch(addAuthor(createdAuthor));
-			setAuthors((prevState) => [...prevState, createdAuthor]);
+			dispatch(addNewAuthor(createdAuthor, token) as any);
+			setAuthors(authorsArray);
 			resetNewAuthor();
 		} else {
 			alert('Authors name must be longer than 2 characters');
 		}
-	}, [newAuthor, newAuthorIsValid, resetNewAuthor, dispatch]);
+	}, [
+		newAuthor,
+		newAuthorIsValid,
+		resetNewAuthor,
+		dispatch,
+		token,
+		authorsArray,
+	]);
 
 	const durationChangeHandler = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
@@ -114,10 +155,9 @@ const CreateCourse = () => {
 		formIsValid = true;
 	}
 
-	const formSubmitHandler = useCallback(
+	const createCourseHandler = useCallback(
 		(event: FormEvent) => {
 			event.preventDefault();
-			const date = dateGenerator(new Date());
 			const authorsList = selectedAuthors.map((author) => author.id);
 			if (!formIsValid || authorsList.length === 0) {
 				alert('Please, fill in all fields');
@@ -134,15 +174,19 @@ const CreateCourse = () => {
 					alert('You have to add author to course');
 				}
 			} else {
-				const newCourse: Course = {
-					id: v4(),
-					title,
-					description,
-					creationDate: date,
-					duration: +duration,
+				const newCourse: CourseApi = {
+					title: title,
+					description: description,
+					duration: parseInt(duration, 10),
 					authors: authorsList,
 				};
-				dispatch(addCourse(newCourse));
+
+				if (!courseId) {
+					dispatch(addNewCourse(newCourse, token) as any);
+				} else {
+					dispatch(updateCourse(newCourse, token, courseId) as any);
+				}
+
 				resetTitle();
 				resetDescription();
 				resetDuration();
@@ -165,12 +209,14 @@ const CreateCourse = () => {
 			titleHasError,
 			navigate,
 			dispatch,
+			token,
+			courseId,
 		]
 	);
 
 	return (
 		<div className='wrapper'>
-			<form onSubmit={formSubmitHandler} className={styles['course-form']}>
+			<form onSubmit={createCourseHandler} className={styles['course-form']}>
 				<div className={styles['course-form__header']}>
 					<Input
 						type='text'
@@ -186,7 +232,9 @@ const CreateCourse = () => {
 						required
 					/>
 					<div className={styles['course-form__buttons']}>
-						<Button type='submit'>Create course</Button>
+						<Button type='submit'>
+							{courseId ? 'Update course' : 'Create course'}
+						</Button>
 						<Button onClick={onCancel} invert={true} type='button'>
 							Cancel
 						</Button>
@@ -300,4 +348,4 @@ const CreateCourse = () => {
 	);
 };
 
-export default CreateCourse;
+export default CourseForm;

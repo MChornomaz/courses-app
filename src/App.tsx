@@ -6,12 +6,13 @@ import Header from './components/Header/Header';
 import Registration from './components/Registration/Registration';
 import Login from './components/Login/Login';
 import CourseInfo from './components/CourseInfo/CourseInfo';
-import CreateCourse from './components/CreateCourse/CreateCourse';
+import CourseForm from './components/CourseForm/CourseForm';
 import { useTypedSelector } from './hooks/useTypedSelector';
 import { useTypedDispatch } from './hooks/useTypedDispatch';
 import { UserLoginPayload } from './store/user/actionTypes';
-import { logInUser } from './store/user/actionCreators';
+import { logInUserAction } from './store/user/actionCreators';
 import { getUser } from './store/selectors';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import { ROUTES } from './constants';
 import Page404 from './components/Page404/Page404';
 
@@ -20,21 +21,23 @@ function App() {
 	const name = localStorage.getItem('userName');
 	const token = localStorage.getItem('token');
 	const email = localStorage.getItem('email');
+	const role = localStorage.getItem('role');
 	const user = useTypedSelector(getUser);
 	const isLoggedIn = user ? user.isAuth : false;
 
 	const dispatch = useTypedDispatch();
 
 	useEffect(() => {
-		if (name && email && token) {
+		if (name && email && token && role) {
 			const loggedUser: UserLoginPayload = {
 				name,
 				email,
 				token,
+				role,
 			};
-			dispatch(logInUser(loggedUser));
+			dispatch(logInUserAction(loggedUser));
 		}
-	}, [dispatch, name, email, token]);
+	}, [dispatch, name, email, token, role]);
 
 	useEffect(() => {
 		if (isLoggedIn) {
@@ -50,18 +53,32 @@ function App() {
 			<Header />
 			<Routes>
 				{isLoggedIn && (
-					<Route path='/' element={<Navigate replace to={ROUTES.COURSES} />} />
+					<Route
+						path='/'
+						element={<Navigate replace to={`${ROUTES.COURSES}`} />}
+					/>
 				)}
 				{isLoggedIn && (
 					<Route path={`${ROUTES.COURSES}/*`} element={<Courses />} />
 				)}
 				{isLoggedIn && (
-					<Route path={ROUTES.ADD_COURSE} element={<CreateCourse />} />
+					<Route
+						element={<PrivateRoute userRole={role} redirectPath={ROUTES.COURSES} />}
+					>
+						<Route path={`${ROUTES.ADD_COURSE}`} element={<CourseForm />} />
+					</Route>
 				)}
+
 				{isLoggedIn && (
 					<Route
 						path={`${ROUTES.COURSES}/:courseId`}
 						element={<CourseInfo />}
+					/>
+				)}
+				{isLoggedIn && (
+					<Route
+						path={`${ROUTES.UPDATE_COURSE}/:courseId`}
+						element={<CourseForm />}
 					/>
 				)}
 				<Route path={ROUTES.REGISTRATION} element={<Registration />} />

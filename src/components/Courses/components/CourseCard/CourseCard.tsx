@@ -4,16 +4,19 @@ import { useMemo, useCallback } from 'react';
 import Button from '../../../../common/Button/Button';
 
 import pipeDuration from '../../../../helpers/pipeDuration';
-import { Course, Author } from '../../../../types/types';
 import { useTypedSelector } from '../../../../hooks/useTypedSelector';
-import { getAllAuthors } from '../../../../store/selectors';
 import { useTypedDispatch } from '../../../../hooks/useTypedDispatch';
-import { deleteCourse } from '../../../../store/courses/actionCreators';
+import { getAllAuthors } from '../../../../store/selectors';
+import { Course, Author } from '../../../../types/types';
 
-import styles from './courseCard.module.scss';
+import { getUser } from './../../../../store/selectors';
+import { deleteCourse } from '../../../../store/courses/thunk';
 import { ROUTES } from '../../../../constants';
 import CheckIcon from '../../../../static/icons/CheckIcon';
 import DeleteIcon from '../../../../static/icons/DeleteIcon';
+
+import styles from './courseCard.module.scss';
+import userIsAdmin from '../../../../helpers/userisAdmin';
 
 type CardProps = {
 	cardInfo: Course;
@@ -22,11 +25,14 @@ type CardProps = {
 const CourseCard: React.FC<CardProps> = ({ cardInfo }) => {
 	const { id, title, duration, creationDate, authors } = cardInfo;
 	let { description } = cardInfo;
-
+	const user = useTypedSelector(getUser);
 	let { authors: authorsArray } = useTypedSelector(getAllAuthors);
+	const { token } = useTypedSelector(getUser);
 
 	const navigate = useNavigate();
 	const dispatch = useTypedDispatch();
+
+	const isAdmin = userIsAdmin(user);
 
 	const authorArr = useMemo(() => {
 		let newAuthorArr: Author[] = [];
@@ -48,12 +54,19 @@ const CourseCard: React.FC<CardProps> = ({ cardInfo }) => {
 	}, [id, navigate]);
 
 	const deleteCourseHandler = useCallback(() => {
-		dispatch(deleteCourse(id));
-	}, [dispatch, id]);
+		const courseId = {
+			id,
+		};
+		dispatch(deleteCourse(courseId, token) as any);
+	}, [dispatch, id, token]);
 
 	const cutString = useCallback((str: string, number: number) => {
 		return str.slice(0, number);
 	}, []);
+
+	const updateCourseHandler = useCallback(() => {
+		navigate(`${ROUTES.UPDATE_COURSE}/${id}`);
+	}, [id, navigate]);
 
 	if (description && description.length > 420) {
 		description = cutString(description, 420) + '...';
@@ -80,13 +93,17 @@ const CourseCard: React.FC<CardProps> = ({ cardInfo }) => {
 				</p>
 				<div className={styles.card__buttons}>
 					<Button onClick={showCourseInfoHandler}>Show course</Button>
-					<Button>
-						<CheckIcon />
-					</Button>
+					{isAdmin && (
+						<>
+							<Button onClick={updateCourseHandler}>
+								<CheckIcon />
+							</Button>
 
-					<Button onClick={deleteCourseHandler}>
-						<DeleteIcon />
-					</Button>
+							<Button onClick={deleteCourseHandler}>
+								<DeleteIcon />
+							</Button>
+						</>
+					)}
 				</div>
 			</div>
 		</div>

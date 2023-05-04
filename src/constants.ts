@@ -58,17 +58,37 @@ export const ADD_COURSE_BUTTON = 'Add new course';
 
 export const NO_AUTHORS_FOUND = 'Author list is empty';
 
-export const ROUTES = {
-	COURSES: '/courses',
-	ADD_COURSE: '/courses/add',
-	REGISTRATION: '/registration',
-	LOGIN: '/login',
-};
+
 
 //API URLs
 
-export const SERVER_URL = 'http://localhost:4000/';
+export const ROUTES = {
+	COURSES: '/courses',
+	ADD_COURSE: '/courses/add',
+	UPDATE_COURSE: '/courses/update',
+	REGISTRATION: '/registration',
+	LOGIN: '/login',
+	LOGOUT: '/logout',
+};
 
-export const GET_AUTHORS_URL = `${SERVER_URL}authors/all`;
+export const SERVER_URL = 'http://localhost:4000';
+
+export const GET_AUTHORS_URL = `${SERVER_URL}/authors/all`;
 
 export const GET_COURSES_URL = `${SERVER_URL}${ROUTES.COURSES}/all`;
+
+export const GET_CURRENT_USER_URL = `${SERVER_URL}/users/me`;
+
+export const LOG_IN_URL = `${SERVER_URL}${ROUTES.LOGIN}`;
+
+export const LOG_OUT_URL = `${SERVER_URL}${ROUTES.LOGOUT}`;
+
+export const ADD_COURSE_URL = `${SERVER_URL}${ROUTES.ADD_COURSE}`;
+
+export const ADD_AUTHOR_URL = `${SERVER_URL}/authors/add`;
+
+export const DELETE_COURSE_URL = `${SERVER_URL}/courses/`;
+
+export const UPDATE_COURSE_URL = `${SERVER_URL}/courses/`;
+
+export const REGISTRATION_URL = `${SERVER_URL}/register/`;

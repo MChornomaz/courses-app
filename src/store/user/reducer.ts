@@ -6,6 +6,9 @@ const userInitialState: User = {
 	name: '',
 	email: '',
 	token: '',
+	role: '',
+	isLoading: false,
+	hasError: null,
 };
 
 export const userReducer = (
@@ -13,6 +16,8 @@ export const userReducer = (
 	action: UserActions
 ): User => {
 	switch (action.type) {
+		case UserActionTypes.USER_IS_LOADING:
+			return { ...state, isLoading: true };
 		case UserActionTypes.LOG_IN_USER:
 			return {
 				...state,
@@ -20,6 +25,8 @@ export const userReducer = (
 				name: action.payload.name,
 				email: action.payload.email,
 				token: action.payload.token,
+				role: action.payload.role,
+				isLoading: false,
 			};
 		case UserActionTypes.LOG_OUT_USER:
 			return {
@@ -28,7 +35,11 @@ export const userReducer = (
 				name: '',
 				email: '',
 				token: '',
+				role: '',
+				isLoading: false,
 			};
+		case UserActionTypes.USER_HAS_ERROR:
+			return { ...state, isLoading: false, hasError: action.payload };
 		default:
 			return state;
 	}

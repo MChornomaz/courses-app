@@ -12,16 +12,17 @@ import { getAllAuthors, getAllCourses } from '../../store/selectors';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import {
-	getAuthors,
-	loadAuthors,
-	setAuthorsError,
+	getAuthorsAction,
+	loadAuthorsAction,
+	setAuthorsErrorAction,
 } from '../../store/authors/actionCreators';
 import { fetchAllAuthors, fetchAllCourses } from '../../services';
 import {
-	courseIsLoading,
-	setCourseFetchError,
+	courseIsLoadingAction,
+	setCourseFetchErrorAction,
+	getCoursesAction,
 } from '../../store/courses/actionCreators';
-import { getCourses } from './../../store/courses/actionCreators';
+import { getUser } from './../../store/selectors';
 
 import styles from './courses.module.scss';
 
@@ -35,36 +36,32 @@ const Courses = () => {
 	const [clearSearch, setClearSearch] = useState(true);
 
 	const navigate = useNavigate();
-
+	const { role } = useTypedSelector(getUser);
 	const authors = useTypedSelector(getAllAuthors);
 	const dispatch = useTypedDispatch();
 
 	useEffect(() => {
 		const receiveAllAuthors = async () => {
 			try {
-				dispatch(loadAuthors());
+				dispatch(loadAuthorsAction());
 				const authorArr = await fetchAllAuthors();
-				dispatch(getAuthors(authorArr));
+				dispatch(getAuthorsAction(authorArr));
 			} catch (e) {
-				dispatch(setAuthorsError('Fetching authors failed'));
+				dispatch(setAuthorsErrorAction('Fetching authors failed'));
 			}
 		};
-		// if check was made to make app work correctly
-		//and will be removed after adding proper add author to API functionality in the next homework
 
-		if (authors.authors.length === 0) {
-			receiveAllAuthors();
-		}
+		receiveAllAuthors();
 	}, [dispatch, authors.authors.length]);
 
 	useEffect(() => {
 		const receiveAllCourses = async () => {
 			try {
-				dispatch(courseIsLoading());
+				dispatch(courseIsLoadingAction());
 				const coursesArr = await fetchAllCourses();
-				dispatch(getCourses(coursesArr));
+				dispatch(getCoursesAction(coursesArr));
 			} catch (e) {
-				dispatch(setCourseFetchError('Failed to fetch courses'));
+				dispatch(setCourseFetchErrorAction('Failed to fetch courses'));
 			}
 		};
 
@@ -122,7 +119,9 @@ const Courses = () => {
 			<>
 				<div className={styles.header}>
 					<SearchBar onSearch={searchHandler} clearSearch={setClearSearch} />
-					<Button onClick={createCourseHandler}>{ADD_COURSE_BUTTON}</Button>
+					{role === 'admin' && (
+						<Button onClick={createCourseHandler}>{ADD_COURSE_BUTTON}</Button>
+					)}
 				</div>
 				<div>
 					{filteredCourses &&

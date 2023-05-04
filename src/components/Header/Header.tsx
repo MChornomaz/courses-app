@@ -7,13 +7,14 @@ import { ROUTES } from '../../constants';
 
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
-import { logOutUser } from '../../store/user/actionCreators';
 import { getUser } from './../../store/selectors';
+import { logOutThunk } from '../../store/user/thunk';
 
 import styles from './header.module.scss';
+import { ROUTES } from '../../constants';
 
 const Header = () => {
-	const { name, isAuth } = useTypedSelector(getUser);
+	const { name, isAuth, token } = useTypedSelector(getUser);
 	const dispatch = useTypedDispatch();
 
 	const location = useLocation();
@@ -24,17 +25,19 @@ const Header = () => {
 		: (showControls = true);
 
 	const logOutHandler = useCallback(() => {
-		dispatch(logOutUser());
-	}, [dispatch]);
+		dispatch(logOutThunk(token) as any);
+	}, [dispatch, token]);
+
+	const shownUserName = name === 'null' ? 'Admin' : name;
 
 	return (
 		<header className={styles.header}>
-			<NavLink to='courses' className={styles.header__logo}>
+			<NavLink to={ROUTES.COURSES} className={styles.header__logo}>
 				<Logo />
 			</NavLink>
 			<div className={styles.header__content}>
 				{isAuth && showControls && (
-					<p className={styles['header__user-name']}>{name}</p>
+					<p className={styles['header__user-name']}>{shownUserName}</p>
 				)}
 				{showControls && (
 					<Button onClick={logOutHandler}>{name ? 'Logout' : 'Login'}</Button>
