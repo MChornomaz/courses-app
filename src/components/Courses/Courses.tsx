@@ -68,6 +68,39 @@ const Courses = () => {
 		receiveAllCourses();
 	}, [dispatch]);
 
+	const authors = useTypedSelector(getAllAuthors);
+	const dispatch = useTypedDispatch();
+
+	useEffect(() => {
+		const receiveAllAuthors = async () => {
+			try {
+				dispatch(loadAuthorsAction());
+				const authorArr = await fetchAllAuthors();
+				dispatch(getAuthorsAction(authorArr));
+			} catch (e) {
+				dispatch(setAuthorsErrorAction('Fetching authors failed'));
+			}
+		};
+
+		receiveAllAuthors();
+	}, [dispatch, authors.authors.length]);
+
+	useEffect(() => {
+		const receiveAllCourses = async () => {
+			try {
+				dispatch(courseIsLoadingAction());
+				const coursesArr = await fetchAllCourses();
+				dispatch(getCoursesAction(coursesArr));
+			} catch (e) {
+				dispatch(setCourseFetchErrorAction('Failed to fetch courses'));
+			}
+		};
+
+		if (stateCourses.length === 0) {
+			receiveAllCourses();
+		}
+	}, [dispatch, stateCourses.length]);
+
 	let filteredCourses = courses;
 
 	const searchHandler = useCallback(

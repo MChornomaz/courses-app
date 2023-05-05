@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 
 import Button from '../../common/Button/Button';
 import Logo from './components/Logo/Logo';
+import { ROUTES } from '../../constants';
 
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
@@ -11,6 +12,9 @@ import { logOutThunk } from '../../store/user/thunk';
 import { ROUTES } from '../../constants';
 
 import styles from './header.module.scss';
+
+import styles from './header.module.scss';
+import { ROUTES } from '../../constants';
 
 const Header = () => {
 	const { name, isAuth, token } = useTypedSelector(getUser);
@@ -31,7 +35,7 @@ const Header = () => {
 
 	return (
 		<header className={styles.header}>
-			<NavLink to='courses' className={styles.header__logo}>
+			<NavLink to={ROUTES.COURSES} className={styles.header__logo}>
 				<Logo />
 			</NavLink>
 			<div className={styles.header__content}>

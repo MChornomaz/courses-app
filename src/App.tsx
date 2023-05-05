@@ -14,6 +14,7 @@ import { useTypedDispatch } from './hooks/useTypedDispatch';
 import { UserLoginPayload } from './store/user/actionTypes';
 import { logInUserAction } from './store/user/actionCreators';
 import { getUser } from './store/selectors';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import { ROUTES } from './constants';
 
 function App() {
@@ -52,7 +53,10 @@ function App() {
 			<Header />
 			<Routes>
 				{isLoggedIn && (
-					<Route path='/' element={<Navigate replace to={ROUTES.COURSES} />} />
+					<Route
+						path='/'
+						element={<Navigate replace to={`${ROUTES.COURSES}`} />}
+					/>
 				)}
 				{isLoggedIn && (
 					<Route path={`${ROUTES.COURSES}/*`} element={<Courses />} />

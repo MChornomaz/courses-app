@@ -16,7 +16,14 @@ import CheckIcon from '../../../../static/icons/CheckIcon';
 import DeleteIcon from '../../../../static/icons/DeleteIcon';
 import { ROUTES } from '../../../../constants';
 
+import { getUser } from './../../../../store/selectors';
+import { deleteCourse } from '../../../../store/courses/thunk';
+import { ROUTES } from '../../../../constants';
+import CheckIcon from '../../../../static/icons/CheckIcon';
+import DeleteIcon from '../../../../static/icons/DeleteIcon';
+
 import styles from './courseCard.module.scss';
+import userIsAdmin from '../../../../helpers/userisAdmin';
 
 type CardProps = {
 	cardInfo: Course;
@@ -26,6 +33,9 @@ const CourseCard: React.FC<CardProps> = ({ cardInfo }) => {
 	const { id, title, duration, creationDate, authors } = cardInfo;
 	let { description } = cardInfo;
 	const user = useTypedSelector(getUser);
+	let { authors: authorsArray } = useTypedSelector(getAllAuthors);
+	const { token } = useTypedSelector(getUser);
+
 	let { authors: authorsArray } = useTypedSelector(getAllAuthors);
 	const { token } = useTypedSelector(getUser);
 

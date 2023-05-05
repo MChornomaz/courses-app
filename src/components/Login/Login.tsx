@@ -15,6 +15,9 @@ import { ROUTES } from '../../constants';
 
 import styles from './Login.module.scss';
 
+import styles from './Login.module.scss';
+import { ROUTES } from '../../constants';
+
 const Login = () => {
 	const user = useTypedSelector(getUser);
 	const { isLoading, hasError } = user;
@@ -53,7 +56,7 @@ const Login = () => {
 				};
 				try {
 					dispatch(logInUserThunk(loggedUser) as any);
-				} catch (e) {}
+				} catch (e) { }
 				resetUserEmail();
 				resetUserPassword();
 			} else if (hasError) {

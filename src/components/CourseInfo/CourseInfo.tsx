@@ -7,6 +7,7 @@ import { getAllAuthors, getAllCourses } from './../../store/selectors';
 import { ROUTES } from '../../constants';
 
 import styles from './CourseInfo.module.scss';
+import { ROUTES } from '../../constants';
 
 const CourseInfo = () => {
 	const params = useParams();
@@ -15,7 +16,6 @@ const CourseInfo = () => {
 	const course: Course | undefined = courses.find(
 		(item) => item.id === courseId
 	);
-
 	const durationString = course ? pipeDuration(course.duration) : '';
 
 	const { authors } = useTypedSelector(getAllAuthors);
