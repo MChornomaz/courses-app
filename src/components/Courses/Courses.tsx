@@ -74,29 +74,25 @@ const Courses = () => {
 	useEffect(() => {
 		const receiveAllAuthors = async () => {
 			try {
-				dispatch(loadAuthors());
+				dispatch(loadAuthorsAction());
 				const authorArr = await fetchAllAuthors();
-				dispatch(getAuthors(authorArr));
+				dispatch(getAuthorsAction(authorArr));
 			} catch (e) {
-				dispatch(setAuthorsError('Fetching authors failed'));
+				dispatch(setAuthorsErrorAction('Fetching authors failed'));
 			}
 		};
-		// if check was made to make app work correctly
-		//and will be removed after adding proper add author to API functionality in the next homework
 
-		if (authors.authors.length === 0) {
-			receiveAllAuthors();
-		}
+		receiveAllAuthors();
 	}, [dispatch, authors.authors.length]);
 
 	useEffect(() => {
 		const receiveAllCourses = async () => {
 			try {
-				dispatch(courseIsLoading());
+				dispatch(courseIsLoadingAction());
 				const coursesArr = await fetchAllCourses();
-				dispatch(getCourses(coursesArr));
+				dispatch(getCoursesAction(coursesArr));
 			} catch (e) {
-				dispatch(setCourseFetchError('Failed to fetch courses'));
+				dispatch(setCourseFetchErrorAction('Failed to fetch courses'));
 			}
 		};
 

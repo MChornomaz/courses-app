@@ -105,6 +105,7 @@ const CourseForm = () => {
 		const createdAuthor: AuthorApiBody = {
 			name: newAuthor,
 		};
+
 		if (newAuthorIsValid) {
 			dispatch(addNewAuthor(createdAuthor, token) as any);
 			setAuthors(authorsArray);

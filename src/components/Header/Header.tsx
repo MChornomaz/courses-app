@@ -14,6 +14,7 @@ import { ROUTES } from '../../constants';
 import styles from './header.module.scss';
 
 import styles from './header.module.scss';
+import { ROUTES } from '../../constants';
 
 const Header = () => {
 	const { name, isAuth, token } = useTypedSelector(getUser);
@@ -34,7 +35,7 @@ const Header = () => {
 
 	return (
 		<header className={styles.header}>
-			<NavLink to='courses' className={styles.header__logo}>
+			<NavLink to={ROUTES.COURSES} className={styles.header__logo}>
 				<Logo />
 			</NavLink>
 			<div className={styles.header__content}>
