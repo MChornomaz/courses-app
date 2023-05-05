@@ -1,4 +1,9 @@
-import { combineReducers, createStore, applyMiddleware } from 'redux';
+import {
+	combineReducers,
+	createStore,
+	applyMiddleware,
+	PreloadedState,
+} from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { authorReducer } from './authors/reducer';
@@ -16,6 +21,12 @@ export const store = createStore(
 	composeWithDevTools(applyMiddleware(thunk))
 );
 
+export function setupStore(preloadedState?: PreloadedState<RootState>) {
+	return createStore(rootReducer, preloadedState);
+}
+
 export type RootState = ReturnType<typeof rootReducer>;
 
 export type AppDispatch = typeof store.dispatch;
+
+export type AppStore = ReturnType<typeof setupStore>;

@@ -4,6 +4,7 @@ import { Course } from '../../types/types';
 import pipeDuration from '../../helpers/pipeDuration';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { getAllAuthors, getAllCourses } from './../../store/selectors';
+import { ROUTES } from '../../constants';
 
 import styles from './CourseInfo.module.scss';
 import { ROUTES } from '../../constants';
@@ -53,7 +54,7 @@ const CourseInfo = () => {
 							</p>
 							<ul className={styles['card-info__authors']}>
 								{course.authors.map((authorId) => {
-									const author = authors.filter((el) => el.id === authorId)[0];
+									const author = authors.find((el) => el.id === authorId);
 									if (!author) {
 										return null;
 									}

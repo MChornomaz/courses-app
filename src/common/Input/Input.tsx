@@ -15,6 +15,7 @@ type InputProps = {
 	errorText?: string;
 	onBlur?: () => void;
 	autocomplete?: string;
+	testid?: string;
 };
 
 const Input: React.FC<InputProps> = (props) => {
@@ -31,6 +32,7 @@ const Input: React.FC<InputProps> = (props) => {
 		errorText,
 		onBlur,
 		autocomplete,
+		testid,
 	} = props;
 
 	return (
@@ -46,6 +48,7 @@ const Input: React.FC<InputProps> = (props) => {
 				type={type}
 				onBlur={onBlur}
 				autoComplete={autocomplete}
+				data-testid={testid}
 			/>
 
 			{label && (

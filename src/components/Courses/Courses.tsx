@@ -65,6 +65,37 @@ const Courses = () => {
 			}
 		};
 
+		receiveAllCourses();
+	}, [dispatch]);
+
+	const authors = useTypedSelector(getAllAuthors);
+	const dispatch = useTypedDispatch();
+
+	useEffect(() => {
+		const receiveAllAuthors = async () => {
+			try {
+				dispatch(loadAuthorsAction());
+				const authorArr = await fetchAllAuthors();
+				dispatch(getAuthorsAction(authorArr));
+			} catch (e) {
+				dispatch(setAuthorsErrorAction('Fetching authors failed'));
+			}
+		};
+
+		receiveAllAuthors();
+	}, [dispatch, authors.authors.length]);
+
+	useEffect(() => {
+		const receiveAllCourses = async () => {
+			try {
+				dispatch(courseIsLoadingAction());
+				const coursesArr = await fetchAllCourses();
+				dispatch(getCoursesAction(coursesArr));
+			} catch (e) {
+				dispatch(setCourseFetchErrorAction('Failed to fetch courses'));
+			}
+		};
+
 		if (stateCourses.length === 0) {
 			receiveAllCourses();
 		}
@@ -120,7 +151,9 @@ const Courses = () => {
 				<div className={styles.header}>
 					<SearchBar onSearch={searchHandler} clearSearch={setClearSearch} />
 					{role === 'admin' && (
-						<Button onClick={createCourseHandler}>{ADD_COURSE_BUTTON}</Button>
+						<Button testid='add-course' onClick={createCourseHandler}>
+							{ADD_COURSE_BUTTON}
+						</Button>
 					)}
 				</div>
 				<div>
@@ -128,7 +161,9 @@ const Courses = () => {
 						filteredCourses.map((course) => (
 							<CourseCard cardInfo={course} key={course.id} />
 						))}
-					{filteredCourses.length === 0 && <p>{NO_COURSES}</p>}
+					{(!filteredCourses || filteredCourses.length === 0) && (
+						<p data-testid='no-courses'>{NO_COURSES}</p>
+					)}
 				</div>
 			</>
 		</div>

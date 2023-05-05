@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 
 import useHttp from '../../hooks/use-http';
 import { createUser } from './../../services';
+import { ROUTES } from '../../constants';
 
 import Input from '../../common/Input/Input';
 import Button from '../../common/Button/Button';
@@ -60,7 +61,10 @@ const Registration = () => {
 					email: userEmail,
 					password: userPassword,
 				};
-				const response = await sendRequest(REGISTRATION_URL, newUser);
+				const response = await sendRequest(
+					`${process.env.REACT_APP_SERVER_URL}/register`,
+					newUser
+				);
 				if (response.successful) {
 					resetUserName();
 					resetUserEmail();

@@ -64,6 +64,6 @@ export const fetchAllCourses = async () => {
 	if (result.successful) {
 		return result.result;
 	} else {
-		throw new Error('Courses fetch failed');
+		throw new Error('Authors fetch failed');
 	}
 };

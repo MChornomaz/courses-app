@@ -37,6 +37,9 @@ type CourseFetchErrorAction = {
 	type: CoursesActionTypes.COURSE_FETCH_HAS_ERROR;
 	payload: string;
 };
+type CourseDefaultAction = {
+	type: undefined;
+};
 
 export type CoursesActions =
 	| GetCoursesAction
@@ -44,4 +47,5 @@ export type CoursesActions =
 	| UpdateCourseAction
 	| DeleteCourseAction
 	| CourseIsLoadingAction
-	| CourseFetchErrorAction;
+	| CourseFetchErrorAction
+	| CourseDefaultAction;

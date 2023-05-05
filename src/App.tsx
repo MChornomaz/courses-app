@@ -7,6 +7,8 @@ import Registration from './components/Registration/Registration';
 import Login from './components/Login/Login';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 import CourseForm from './components/CourseForm/CourseForm';
+import Page404 from './common/Page404/Page404';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import { useTypedSelector } from './hooks/useTypedSelector';
 import { useTypedDispatch } from './hooks/useTypedDispatch';
 import { UserLoginPayload } from './store/user/actionTypes';
@@ -14,7 +16,6 @@ import { logInUserAction } from './store/user/actionCreators';
 import { getUser } from './store/selectors';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import { ROUTES } from './constants';
-import Page404 from './components/Page404/Page404';
 
 function App() {
 	const navigate = useNavigate();
@@ -45,7 +46,6 @@ function App() {
 		} else {
 			navigate(ROUTES.LOGIN);
 		}
-		// eslint-disable-next-line
 	}, [isLoggedIn]);
 
 	return (
@@ -63,9 +63,11 @@ function App() {
 				)}
 				{isLoggedIn && (
 					<Route
-						element={<PrivateRoute userRole={role} redirectPath={ROUTES.COURSES} />}
+						element={
+							<PrivateRoute userRole={role} redirectPath={ROUTES.COURSES} />
+						}
 					>
-						<Route path={`${ROUTES.ADD_COURSE}`} element={<CourseForm />} />
+						<Route path={ROUTES.ADD_COURSE} element={<CourseForm />} />
 					</Route>
 				)}
 

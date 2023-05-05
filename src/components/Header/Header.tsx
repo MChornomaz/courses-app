@@ -9,6 +9,9 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import { getUser } from './../../store/selectors';
 import { logOutThunk } from '../../store/user/thunk';
+import { ROUTES } from '../../constants';
+
+import styles from './header.module.scss';
 
 import styles from './header.module.scss';
 import { ROUTES } from '../../constants';
@@ -20,7 +23,7 @@ const Header = () => {
 	const location = useLocation();
 	const urlSlug = location.pathname;
 	let showControls: boolean;
-	urlSlug === '/login' || urlSlug === '/registration'
+	urlSlug === ROUTES.LOGIN || urlSlug === ROUTES.REGISTRATION
 		? (showControls = false)
 		: (showControls = true);
 
@@ -37,7 +40,9 @@ const Header = () => {
 			</NavLink>
 			<div className={styles.header__content}>
 				{isAuth && showControls && (
-					<p className={styles['header__user-name']}>{shownUserName}</p>
+					<p data-testid='user-name' className={styles['header__user-name']}>
+						{shownUserName}
+					</p>
 				)}
 				{showControls && (
 					<Button onClick={logOutHandler}>{name ? 'Logout' : 'Login'}</Button>
