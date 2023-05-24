@@ -9,12 +9,8 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import { getUser } from './../../store/selectors';
 import { logOutThunk } from '../../store/user/thunk';
-import { ROUTES } from '../../constants';
 
 import styles from './header.module.scss';
-
-import styles from './header.module.scss';
-import { ROUTES } from '../../constants';
 
 const Header = () => {
 	const { name, isAuth, token } = useTypedSelector(getUser);

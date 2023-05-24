@@ -13,7 +13,6 @@ import useInput from '../../hooks/use-input';
 import { User } from '../../types/types';
 
 import styles from './Registration.module.scss';
-import { REGISTRATION_URL, ROUTES } from '../../constants';
 
 const Registration = () => {
 	const { sendRequest, status, error } = useHttp(createUser, false);

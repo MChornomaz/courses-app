@@ -7,7 +7,6 @@ import { getAllAuthors, getAllCourses } from './../../store/selectors';
 import { ROUTES } from '../../constants';
 
 import styles from './CourseInfo.module.scss';
-import { ROUTES } from '../../constants';
 
 const CourseInfo = () => {
 	const params = useParams();

@@ -32,13 +32,17 @@ const Courses = () => {
 		error,
 		isLoading: coursesLoading,
 	} = useTypedSelector(getAllCourses);
-	const [courses, setCourses] = useState<Course[]>(stateCourses);
+	const [courses, setCourses] = useState<Course[]>([]);
 	const [clearSearch, setClearSearch] = useState(true);
 
 	const navigate = useNavigate();
 	const { role } = useTypedSelector(getUser);
 	const authors = useTypedSelector(getAllAuthors);
 	const dispatch = useTypedDispatch();
+
+	useEffect(() => {
+		setCourses(stateCourses);
+	}, [setCourses, stateCourses]);
 
 	useEffect(() => {
 		const receiveAllAuthors = async () => {
@@ -68,9 +72,6 @@ const Courses = () => {
 		receiveAllCourses();
 	}, [dispatch]);
 
-	const authors = useTypedSelector(getAllAuthors);
-	const dispatch = useTypedDispatch();
-
 	useEffect(() => {
 		const receiveAllAuthors = async () => {
 			try {
@@ -96,10 +97,10 @@ const Courses = () => {
 			}
 		};
 
-		if (stateCourses.length === 0) {
+		if (!courses || courses.length === 0) {
 			receiveAllCourses();
 		}
-	}, [dispatch, stateCourses.length]);
+	}, [dispatch, courses]);
 
 	let filteredCourses = courses;
 

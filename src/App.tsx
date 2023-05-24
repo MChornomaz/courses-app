@@ -14,7 +14,6 @@ import { useTypedDispatch } from './hooks/useTypedDispatch';
 import { UserLoginPayload } from './store/user/actionTypes';
 import { logInUserAction } from './store/user/actionCreators';
 import { getUser } from './store/selectors';
-import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import { ROUTES } from './constants';
 
 function App() {

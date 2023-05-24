@@ -34,10 +34,11 @@ describe('COURSES', () => {
 			</MemoryRouter>,
 			{
 				preloadedState: {
-					...mockedState,
+					user: mockedState.user,
+					authors: mockedState.authors,
 					courses: {
-						isLoading: mockedState.courses.isLoading,
-						error: mockedState.courses.error,
+						error: null,
+						isLoading: false,
 						courses: [],
 					},
 				},
@@ -55,22 +56,14 @@ describe('COURSES', () => {
 				<Courses />
 			</MemoryRouter>,
 			{
-				preloadedState: {
-					...mockedState,
-					courses: {
-						isLoading: mockedState.courses.isLoading,
-						error: mockedState.courses.error,
-						courses: [],
-					},
-				},
+				preloadedState: mockedState,
 			}
 		);
 
 		const addCourseBtn = await screen.findByTestId('add-course');
 		fireEvent.click(addCourseBtn);
-
-		waitFor(() =>
-			expect(screen.getByTestId('course-form')).toBeInTheDocument()
-		);
+		waitFor(async () => {
+			expect(screen.getByTestId('course-form')).toBeInTheDocument();
+		});
 	});
 });

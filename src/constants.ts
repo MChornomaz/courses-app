@@ -91,7 +91,7 @@ export const mockedState = {
 	user: {
 		isAuth: true,
 		name: 'Test Name',
-		email: '',
+		email: 'test@test.com',
 		token: 'test',
 		role: 'admin',
 		isLoading: false,
